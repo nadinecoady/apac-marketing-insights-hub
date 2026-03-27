@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APAC Market Insights — Q1 2026</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 40%, #162416 100%);
+      color: #e8e8e0;
+      min-height: 100vh;
+      padding: 40px 32px;
+    }
+    .container { max-width: 1300px; margin: 0 auto; }
+    h1 { font-size: 42px; font-weight: 300; letter-spacing: -0.5px; color: #f5f5ed; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: #8a9a7a; margin-bottom: 32px; }
+    .subtitle span { background: #2a4a2a; color: #7ddf64; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+
+    /* Tab Navigation */
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #2a3a2a; padding-bottom: 0; }
+    .tab { padding: 10px 20px; cursor: pointer; font-size: 13px; font-weight: 500; color: #7a8a6a; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab:hover { color: #b0c8a0; }
+    .tab.active { color: #7ddf64; border-bottom-color: #7ddf64; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Section Headers */
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 32px; }
+    .section-header h2 { font-size: 22px; font-weight: 400; color: #d0d8c0; }
+    .section-header .badge { font-size: 11px; background: #1a3a4a; color: #5ab8e8; padding: 3px 10px; border-radius: 10px; }
+    .section-header .badge.red { background: #3a1a1a; color: #e85a5a; }
+    .section-header .badge.green { background: #1a3a1a; color: #7ddf64; }
+
+    /* Sub-region filter pills */
+    .filters { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+    .pill { padding: 6px 14px; border-radius: 16px; font-size: 12px; cursor: pointer; border: 1px solid #3a4a3a; color: #8a9a7a; background: transparent; transition: all 0.2s; }
+    .pill:hover { border-color: #5a7a5a; color: #b0c8a0; }
+    .pill.active { background: #2a4a2a; border-color: #7ddf64; color: #7ddf64; }
+
+    /* Theme bars */
+    .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 768px) { .theme-grid { grid-template-columns: 1fr; } #trends-grid { grid-template-columns: 1fr !important; } }
+    .theme-card { background: rgba(255,255,255,0.03); border: 1px solid #2a3a2a; border-radius: 10px; padding: 16px; }
+    .theme-label { font-size: 12px; color: #8a9a7a; margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .theme-label .pct { font-weight: 600; }
+    .bar-bg { height: 8px; background: #1a2a1a; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .bar-fill.green { background: linear-gradient(90deg, #2a6a2a, #7ddf64); }
+    .bar-fill.red { background: linear-gradient(90deg, #6a2a2a, #e85a5a); }
+    .bar-fill.blue { background: linear-gradient(90deg, #2a4a6a, #5ab8e8); }
+    .theme-detail { font-size: 11px; color: #6a7a5a; margin-top: 6px; line-height: 1.5; }
+
+    /* Won/Lost comparison */
+    .comparison-row { display: grid; grid-template-columns: 180px 1fr 60px 1fr; gap: 8px; align-items: center; padding: 10px 0; border-bottom: 1px solid #1a2a1a; }
+    .comparison-row:last-child { border-bottom: none; }
+    .comp-label { font-size: 12px; color: #a0b090; font-weight: 500; }
+    .comp-pct { font-size: 12px; font-weight: 600; text-align: center; }
+    .comp-pct.won { color: #7ddf64; }
+    .comp-pct.lost { color: #e85a5a; }
+    .comp-bar { height: 6px; border-radius: 3px; }
+    .comp-vs { font-size: 10px; color: #5a6a4a; text-align: center; }
+
+    /* Insight cards */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
+    @media (max-width: 768px) { .card-grid { grid-template-columns: 1fr; } }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid #2a3a2a; border-radius: 10px; padding: 18px; transition: border-color 0.2s; }
+    .card:hover { border-color: #4a6a4a; }
+    .card-source { font-size: 10px; color: #5a7a5a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .card-date { font-size: 10px; color: #4a5a4a; float: right; }
+    .card-title { font-size: 14px; font-weight: 600; color: #d0d8c0; margin-bottom: 8px; }
+    .card-body { font-size: 12px; color: #8a9a7a; line-height: 1.6; }
+    .card-body ul { padding-left: 16px; }
+    .card-body li { margin-bottom: 4px; }
+    .card-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 8px; margin-top: 8px; margin-right: 4px; }
+    .tag-product { background: #1a3a4a; color: #5ab8e8; }
+    .tag-market { background: #2a4a2a; color: #7ddf64; }
+    .tag-risk { background: #3a1a1a; color: #e85a5a; }
+    .tag-competitor { background: #3a2a1a; color: #e8a85a; }
+
+    /* Competitive cards */
+    .comp-card { background: rgba(255,255,255,0.03); border: 1px solid #2a3a2a; border-radius: 10px; padding: 18px; }
+    .comp-logo { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .comp-logo.magento { color: #f26322; }
+    .comp-logo.sfcc { color: #00a1e0; }
+    .comp-logo.shopline { color: #6c5ce7; }
+    .comp-logo.ecbeing { color: #e85a5a; }
+    .comp-share { font-size: 11px; color: #5a6a5a; margin-bottom: 10px; }
+    .comp-bullets { font-size: 12px; color: #8a9a7a; line-height: 1.7; }
+    .comp-bullets li { margin-bottom: 4px; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+    @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { background: rgba(255,255,255,0.04); border: 1px solid #2a3a2a; border-radius: 10px; padding: 16px; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 300; color: #7ddf64; }
+    .stat-label { font-size: 11px; color: #6a7a5a; margin-top: 4px; }
+
+    /* Research cards */
+    .research-card { background: rgba(255,255,255,0.03); border: 1px solid #2a3a2a; border-radius: 10px; padding: 20px; display: flex; gap: 16px; align-items: flex-start; transition: border-color 0.2s; }
+    .research-card:hover { border-color: #4a6a4a; }
+    .research-icon { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .research-icon.pdf { background: #3a1a1a; color: #e85a5a; }
+    .research-icon.slides { background: #3a2a1a; color: #e8a85a; }
+    .research-icon.doc { background: #1a3a4a; color: #5ab8e8; }
+    .research-icon.video { background: #2a1a3a; color: #b85ae8; }
+    .research-meta { flex: 1; }
+    .research-title { font-size: 15px; font-weight: 600; color: #d0d8c0; margin-bottom: 4px; }
+    .research-title a { color: #d0d8c0; text-decoration: none; }
+    .research-title a:hover { color: #7ddf64; text-decoration: underline; }
+    .research-agency { font-size: 11px; color: #5a7a5a; margin-bottom: 6px; }
+    .research-desc { font-size: 12px; color: #8a9a7a; line-height: 1.6; }
+    .research-tags { margin-top: 8px; }
+    .research-grid { display: grid; gap: 12px; }
+
+    .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #1a2a1a; font-size: 11px; color: #4a5a3a; text-align: center; }
+
+    /* Segment filter row */
+    .filter-group { margin-bottom: 16px; }
+    .filter-group-label { font-size: 10px; color: #5a6a4a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .pill.segment { border-color: #3a3a4a; }
+    .pill.segment.active { background: #2a2a4a; border-color: #8a8adf; color: #8a8adf; }
+    .pill.segment:hover { border-color: #5a5a8a; color: #b0b0e0; }
+
+    /* QoQ delta indicators */
+    .delta { font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+    .delta.up { color: #7ddf64; }
+    .delta.down { color: #e85a5a; }
+    .delta.flat { color: #5a6a4a; }
+    .qoq-card { background: rgba(255,255,255,0.03); border: 1px solid #2a3a2a; border-radius: 10px; padding: 18px; }
+    .qoq-theme { font-size: 13px; font-weight: 600; color: #d0d8c0; margin-bottom: 4px; }
+    .qoq-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    .qoq-bars { flex: 1; display: flex; align-items: center; gap: 8px; }
+    .qoq-label { font-size: 11px; color: #6a7a5a; width: 55px; text-align: right; flex-shrink: 0; }
+    .qoq-bar-track { flex: 1; height: 6px; background: #1a2a1a; border-radius: 3px; overflow: hidden; }
+    .qoq-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+    .qoq-pct { font-size: 11px; font-weight: 600; width: 36px; flex-shrink: 0; }
+    .qoq-insight { font-size: 11px; color: #6a7a5a; margin-top: 6px; line-height: 1.5; padding-top: 6px; border-top: 1px solid #1a2a1a; }
+
+    /* Vox pops / merchant quotes */
+    .vox-pop { background: rgba(125,223,100,0.04); border: 1px solid #2a4a2a; border-radius: 12px; padding: 22px 24px; position: relative; }
+    .vox-pop::before { content: '\201C'; font-size: 48px; color: #2a4a2a; position: absolute; top: 8px; left: 14px; line-height: 1; }
+    .vox-quote { font-size: 15px; font-weight: 400; color: #d0d8c0; line-height: 1.6; padding-left: 28px; font-style: italic; }
+    .vox-attribution { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-left: 28px; }
+    .vox-avatar { width: 32px; height: 32px; border-radius: 50%; background: #2a4a2a; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #7ddf64; flex-shrink: 0; }
+    .vox-meta { font-size: 11px; }
+    .vox-who { color: #a0b090; font-weight: 500; }
+    .vox-context { color: #5a6a4a; }
+    .vox-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 8px; margin-left: 8px; background: #1a3a4a; color: #5ab8e8; }
+    .vox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 768px) { .vox-grid { grid-template-columns: 1fr; } }
+
+    /* Featured quote banner */
+    /* Small sample size indicator */
+    .sample-size { font-size: 10px; color: #5a6a4a; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .sample-size .warn { color: #e8a85a; background: #3a2a1a; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+
+    .featured-quote { background: linear-gradient(135deg, #1a2a3a 0%, #1a3a2a 100%); border: 1px solid #2a4a3a; border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; display: flex; align-items: center; gap: 20px; }
+    .featured-quote-icon { font-size: 28px; flex-shrink: 0; }
+    .featured-quote-text { font-size: 14px; color: #d0d8c0; font-style: italic; line-height: 1.5; flex: 1; }
+    .featured-quote-attr { font-size: 11px; color: #5a7a5a; margin-top: 6px; font-style: normal; }
+    .featured-quote-label { font-size: 10px; color: #5ab8e8; background: #1a3a4a; padding: 2px 8px; border-radius: 8px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>APAC Market Insights</h1>
+  <p class="subtitle">What merchants are saying, what the market is doing, and where competitors are headed <span>Q1 2026</span></p>
+
+  <!-- Stats Summary -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">20</div><div class="stat-label">Call themes tracked</div></div>
+    <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">APAC sub-regions</div></div>
+    <div class="stat-card"><div class="stat-num">90d</div><div class="stat-label">Rolling analysis window</div></div>
+    <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Competitors monitored</div></div>
+  </div>
+
+  <!-- Emerging Trends Banner -->
+  <div style="background:linear-gradient(135deg,#1a3a2a 0%,#0d2a3a 100%);border:1px solid #2a4a3a;border-radius:12px;padding:24px 28px;margin-bottom:28px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <span style="font-size:18px;">📡</span>
+      <h2 style="font-size:16px;font-weight:600;color:#7ddf64;margin:0;">Top 5 Emerging Merchant Questions This Quarter</h2>
+      <span style="font-size:10px;background:#2a4a2a;color:#5ab8e8;padding:2px 8px;border-radius:8px;">Q1 2026</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;" id="trends-grid">
+      <div class="trend-card" style="background:rgba(125,223,100,0.06);border:1px solid #2a4a2a;border-radius:10px;padding:14px;cursor:pointer;" onclick="this.querySelector('.trend-detail').style.display=this.querySelector('.trend-detail').style.display==='none'?'block':'none'">
+        <div style="font-size:22px;margin-bottom:6px;">🤖</div>
+        <div style="font-size:13px;font-weight:600;color:#d0d8c0;line-height:1.3;margin-bottom:6px;">"How do I make my products visible to AI agents?"</div>
+        <div style="font-size:10px;color:#5ab8e8;">Agentic Discovery</div>
+        <div class="trend-detail" style="display:none;margin-top:10px;font-size:11px;color:#8a9a7a;line-height:1.5;border-top:1px solid #2a3a2a;padding-top:8px;">
+          ChatGPT, Perplexity, Google Business Agent all live or launching in 2026. Shopify's Agentic Storefronts puts products into AI conversations. Google's UCP protocol creates universal standard. <strong>Japan webinar on this topic drew 192 RSVPs with zero paid budget.</strong> Merchants asking: what data do AI agents need? How do I rank in AI recommendations? Morgan Stanley: ~50% of shoppers will use AI agents by 2030.
+        </div>
+      </div>
+      <div class="trend-card" style="background:rgba(90,184,232,0.06);border:1px solid #2a4a2a;border-radius:10px;padding:14px;cursor:pointer;" onclick="this.querySelector('.trend-detail').style.display=this.querySelector('.trend-detail').style.display==='none'?'block':'none'">
+        <div style="font-size:22px;margin-bottom:6px;">🏪</div>
+        <div style="font-size:13px;font-weight:600;color:#d0d8c0;line-height:1.3;margin-bottom:6px;">"How do I reduce marketplace dependency without losing volume?"</div>
+        <div style="font-size:10px;color:#5ab8e8;">Marketplace → DTC</div>
+        <div class="trend-detail" style="display:none;margin-top:10px;font-size:11px;color:#8a9a7a;line-height:1.5;border-top:1px solid #2a3a2a;padding-top:8px;">
+          APAC merchants on Shopee, Lazada, Rakuten, Tmall want to build DTC but fear losing marketplace volume. <strong>CSM analysis found 43 at-risk Plus brands ($91M) and 920 net-new targets.</strong> Add-platformers join Shopify for growth, reduced fees, brand control. Most installed apps: ads + marketplaces. Social commerce now ~20% of global ecommerce. SEA + GCR = strongest signal.
+        </div>
+      </div>
+      <div class="trend-card" style="background:rgba(125,223,100,0.06);border:1px solid #2a4a2a;border-radius:10px;padding:14px;cursor:pointer;" onclick="this.querySelector('.trend-detail').style.display=this.querySelector('.trend-detail').style.display==='none'?'block':'none'">
+        <div style="font-size:22px;margin-bottom:6px;">🔗</div>
+        <div style="font-size:13px;font-weight:600;color:#d0d8c0;line-height:1.3;margin-bottom:6px;">"Can I run online + offline + B2B on one platform?"</div>
+        <div style="font-size:10px;color:#5ab8e8;">Unified Commerce</div>
+        <div class="trend-detail" style="display:none;margin-top:10px;font-size:11px;color:#8a9a7a;line-height:1.5;border-top:1px solid #2a3a2a;padding-top:8px;">
+          78% of won APAC deals mention integration. POS/omnichannel theme in 38% of won calls and rising. <strong>Japan POS launching Q3 (PayPay, Retail).</strong> APAC leads globally in online+offline integration — store sales +20%, non-store +43% projected by 2028. Merchants want one system for DTC, retail, B2B, and international — not 4 platforms. Omnichannel is now operational imperative, not competitive advantage.
+        </div>
+      </div>
+      <div class="trend-card" style="background:rgba(90,184,232,0.06);border:1px solid #2a4a2a;border-radius:10px;padding:14px;cursor:pointer;" onclick="this.querySelector('.trend-detail').style.display=this.querySelector('.trend-detail').style.display==='none'?'block':'none'">
+        <div style="font-size:22px;margin-bottom:6px;">🌏</div>
+        <div style="font-size:13px;font-weight:600;color:#d0d8c0;line-height:1.3;margin-bottom:6px;">"How do I expand cross-border without managing the complexity?"</div>
+        <div style="font-size:10px;color:#5ab8e8;">Cross-Border Scale</div>
+        <div class="trend-detail" style="display:none;margin-top:10px;font-size:11px;color:#8a9a7a;line-height:1.5;border-top:1px solid #2a3a2a;padding-top:8px;">
+          APAC cross-border ecommerce projected to reach $760B GMV by 2026. <strong>China/HK export market = $36.55B addressable — larger than Japan + Mexico combined.</strong> NIO Firefly chose Shopify Plus specifically for multi-entity expansion stores. FDI into ASEAN +10% as supply chains shift. Merchants want expansion stores, local currencies, local payments — without managing separate tech stacks per market.
+        </div>
+      </div>
+      <div class="trend-card" style="background:rgba(125,223,100,0.06);border:1px solid #2a4a2a;border-radius:10px;padding:14px;cursor:pointer;" onclick="this.querySelector('.trend-detail').style.display=this.querySelector('.trend-detail').style.display==='none'?'block':'none'">
+        <div style="font-size:22px;margin-bottom:6px;">⚡</div>
+        <div style="font-size:13px;font-weight:600;color:#d0d8c0;line-height:1.3;margin-bottom:6px;">"What does AI actually do for my team today — not the future?"</div>
+        <div style="font-size:10px;color:#5ab8e8;">Practical AI Now</div>
+        <div class="trend-detail" style="display:none;margin-top:10px;font-size:11px;color:#8a9a7a;line-height:1.5;border-top:1px solid #2a3a2a;padding-top:8px;">
+          Gap between AI hype and practical value is the #1 feedback from APAC events. <strong>Japan webinar attendees: "Show more specifically what Shopify can do, not just the vision."</strong> Merchants want: automate busy work (Sidekick), generate product descriptions, personalise at scale, AI-powered search. 48% of won deals mention AI — but lost deals cite "unclear when any of this ships." Gartner: 40% of enterprise apps will include AI agents by 2026, up from 5% in 2025.
+        </div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#4a5a3a;margin-top:12px;text-align:right;">Click any card to expand · Sources: call transcripts, web research, event feedback, Slack signals</div>
+  </div>
+
+  <!-- Featured Merchant Quote (rotates on reload) -->
+  <div class="featured-quote" id="featured-quote"></div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('won')">Won Deals</div>
+    <div class="tab" onclick="showTab('lost')">Lost Deals</div>
+    <div class="tab" onclick="showTab('compare')">Won vs Lost</div>
+    <div class="tab" onclick="showTab('qoq')">QoQ Changes</div>
+    <div class="tab" onclick="showTab('voices')">Merchant Voices</div>
+    <div class="tab" onclick="showTab('signals')">Internal Signals</div>
+    <div class="tab" onclick="showTab('competitive')">Competitive Intel</div>
+    <div class="tab" onclick="showTab('research')">Research Library</div>
+  </div>
+
+  <!-- TAB: WON DEALS -->
+  <div id="tab-won" class="tab-content active">
+    <div class="section-header">
+      <h2>What Won Merchants Said</h2>
+      <div class="badge green">Closed Won — Last 90 Days</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Top themes from prospect voice on calls that led to Closed Won deals. % = share of calls where theme appeared.</p>
+    <div class="filter-group">
+      <div class="filter-group-label">Sub-Region</div>
+      <div class="filters" style="margin-bottom:8px">
+        <div class="pill active" onclick="filterWon('region','all',this)">All APAC</div>
+        <div class="pill" onclick="filterWon('region','anz',this)">ANZ</div>
+        <div class="pill" onclick="filterWon('region','jpn',this)">Japan</div>
+        <div class="pill" onclick="filterWon('region','gcr',this)">GCR</div>
+        <div class="pill" onclick="filterWon('region','roa',this)">ROA</div>
+      </div>
+      <div class="filter-group-label">Segment</div>
+      <div class="filters">
+        <div class="pill segment active" onclick="filterWon('segment','all',this)">All Segments</div>
+        <div class="pill segment" onclick="filterWon('segment','large_accounts',this)">Large Accounts</div>
+        <div class="pill segment" onclick="filterWon('segment','mid_market',this)">Mid-Market</div>
+        <div class="pill segment" onclick="filterWon('segment','smb',this)">SMB / Starter</div>
+      </div>
+    </div>
+    <div class="theme-grid" id="won-themes"></div>
+  </div>
+
+  <!-- TAB: LOST DEALS -->
+  <div id="tab-lost" class="tab-content">
+    <div class="section-header">
+      <h2>Why We Lost</h2>
+      <div class="badge red">Closed Lost — Last 90 Days</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Top friction themes from calls on deals we lost. Higher % = more frequently raised objection.</p>
+    <div class="filter-group">
+      <div class="filter-group-label">Sub-Region</div>
+      <div class="filters" style="margin-bottom:8px">
+        <div class="pill active" onclick="filterLost('region','all',this)">All APAC</div>
+        <div class="pill" onclick="filterLost('region','anz',this)">ANZ</div>
+        <div class="pill" onclick="filterLost('region','jpn',this)">Japan</div>
+        <div class="pill" onclick="filterLost('region','gcr',this)">GCR</div>
+        <div class="pill" onclick="filterLost('region','roa',this)">ROA</div>
+      </div>
+      <div class="filter-group-label">Segment</div>
+      <div class="filters">
+        <div class="pill segment active" onclick="filterLost('segment','all',this)">All Segments</div>
+        <div class="pill segment" onclick="filterLost('segment','large_accounts',this)">Large Accounts</div>
+        <div class="pill segment" onclick="filterLost('segment','mid_market',this)">Mid-Market</div>
+        <div class="pill segment" onclick="filterLost('segment','smb',this)">SMB / Starter</div>
+      </div>
+    </div>
+    <div class="theme-grid" id="lost-themes"></div>
+  </div>
+
+  <!-- TAB: COMPARISON -->
+  <div id="tab-compare" class="tab-content">
+    <div class="section-header">
+      <h2>Won vs Lost — Theme Comparison</h2>
+      <div class="badge">Side by Side</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Compare how often each theme appeared in won vs lost deals. Biggest gaps reveal what differentiates wins from losses.</p>
+    <div id="compare-table" style="background:rgba(255,255,255,0.02);border:1px solid #2a3a2a;border-radius:10px;padding:20px;"></div>
+  </div>
+
+  <!-- TAB: QoQ CHANGES -->
+  <div id="tab-qoq" class="tab-content">
+    <div class="section-header">
+      <h2>Quarter over Quarter Changes</h2>
+      <div class="badge">Q1 2026 vs Q1 2025</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">How win/loss themes have shifted vs the same quarter last year. Arrows show direction and magnitude of change in % of calls mentioning each theme.</p>
+    <div class="filters">
+      <div class="pill active" onclick="filterQoQ('won',this)">Won Themes</div>
+      <div class="pill" onclick="filterQoQ('lost',this)">Lost Themes</div>
+    </div>
+    <div class="theme-grid" id="qoq-grid"></div>
+  </div>
+
+  <!-- TAB: MERCHANT VOICES -->
+  <div id="tab-voices" class="tab-content">
+    <div class="section-header">
+      <h2>Merchant Voices</h2>
+      <div class="badge green">Vox Pops</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Real prospect and merchant quotes from sales calls and events. The voice of the market in their own words.</p>
+    <div class="filters">
+      <div class="pill active" onclick="filterVoices('all',this)">All</div>
+      <div class="pill" onclick="filterVoices('won',this)">Won Deals</div>
+      <div class="pill" onclick="filterVoices('lost',this)">Lost Deals</div>
+      <div class="pill" onclick="filterVoices('event',this)">Events</div>
+    </div>
+    <div class="vox-grid" id="voices-grid"></div>
+  </div>
+
+  <!-- TAB: INTERNAL SIGNALS -->
+  <div id="tab-signals" class="tab-content">
+    <div class="section-header">
+      <h2>Internal Market Signals</h2>
+      <div class="badge">Slack Channels</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Key product, market, and growth signals from internal Slack channels.</p>
+    <div class="card-grid" id="signals-cards"></div>
+  </div>
+
+  <!-- TAB: COMPETITIVE -->
+  <div id="tab-competitive" class="tab-content">
+    <div class="section-header">
+      <h2>Competitive Landscape</h2>
+      <div class="badge">Q1 2026</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Key developments from APAC competitors. Updated quarterly.</p>
+    <div class="card-grid" id="competitive-cards"></div>
+  </div>
+
+  <!-- TAB: RESEARCH LIBRARY -->
+  <div id="tab-research" class="tab-content">
+    <div class="section-header">
+      <h2>Research Library</h2>
+      <div class="badge">Commissioned Reports</div>
+    </div>
+    <p style="font-size:13px;color:#7a8a6a;margin-bottom:18px;">Market research commissioned with external agencies. Add new reports by editing the <code>researchData</code> array in this file.</p>
+    <div class="filters">
+      <div class="pill active" onclick="filterResearch('all',this)">All</div>
+      <div class="pill" onclick="filterResearch('apac',this)">APAC-Wide</div>
+      <div class="pill" onclick="filterResearch('anz',this)">ANZ</div>
+      <div class="pill" onclick="filterResearch('jpn',this)">Japan</div>
+      <div class="pill" onclick="filterResearch('gcr',this)">GCR</div>
+      <div class="pill" onclick="filterResearch('roa',this)">ROA</div>
+    </div>
+    <div class="research-grid" id="research-cards"></div>
+  </div>
+
+  <div class="footer">
+    APAC Market Insights — Updated Q1 2026 | Sources: BigQuery call transcripts, #new-markets-growth-talk, #market-insights-team, #competitor-intelligence, web research<br>
+    Call data: <code>apac_sales_calls_90day_analysis.sql</code> | Built by Nadine Coady with Claude Code
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — Replace quarterly by re-running queries
+// ============================================================
+const wonData = {
+  all: [
+    { theme: 'Cost & TCO', pct: 75, detail: 'Pricing and total cost of ownership raised in 3 out of 4 won calls across APAC' },
+    { theme: 'Customization Depth', pct: 67, detail: 'Headless, composable, bespoke — merchants evaluating flexibility of Shopify vs alternatives' },
+    { theme: 'Procurement & Legal', pct: 64, detail: 'Contract terms, RFP process, security questionnaires — enterprise buying friction' },
+    { theme: 'Integration & Tech Stack', pct: 63, detail: 'ERP, API, middleware — merchants evaluating how Shopify connects to existing systems' },
+    { theme: 'Risk & Concern', pct: 62, detail: 'Fear of disruption, migration risk, downtime during transition' },
+    { theme: 'Scalability & Performance', pct: 62, detail: 'Uptime, speed, BFCM readiness — Shopify infrastructure wins trust' },
+    { theme: 'Checkout & Payments', pct: 61, detail: 'Shop Pay, one-click checkout, conversion rate lift — strong product advantage' },
+    { theme: 'Growth & Revenue', pct: 50, detail: 'Revenue growth, market expansion, new channels — Shopify as growth enabler' },
+    { theme: 'Implementation Services', pct: 43, detail: 'Partner/agency support, onboarding, training — partner ecosystem as differentiator' },
+    { theme: 'POS & Omnichannel', pct: 42, detail: 'Unified commerce, in-store + online — growing interest across APAC' },
+    { theme: 'AI & Automation', pct: 39, detail: 'Sidekick, agentic commerce, automation — rising theme especially in events' },
+    { theme: 'B2B', pct: 39, detail: 'B2B selling capabilities discussed in nearly 4 out of 10 won calls' },
+    { theme: 'Migration & Replatforming', pct: 38, detail: 'Merchants actively moving from legacy platforms — Shopify as modern alternative' },
+    { theme: 'Competitive', pct: 32, detail: 'Competitive comparisons raised in roughly a third of won calls' },
+    { theme: 'Timeline & Speed', pct: 31, detail: 'Fast go-live, time to value — merchants choosing speed over customization depth' },
+    { theme: 'International & Multi-Market', pct: 26, detail: 'Cross-border, multi-currency, localization — Markets product resonating' },
+    { theme: 'Security & Compliance', pct: 17, detail: 'SOC2, PCI, data residency — comes up in regulated verticals' },
+    { theme: 'Cross-Border & Marketplace', pct: 12, detail: 'Marketplace-to-DTC motion and cross-border expansion' },
+    { theme: 'Localisation', pct: 11, detail: 'Local language and UX expectations discussed in about 1 in 10 calls' },
+    { theme: 'Local Payments', pct: 6, detail: 'Local payment method availability — low frequency but critical where raised' },
+  ],
+  anz: [
+    { theme: 'Cost & TCO', pct: 83, detail: 'Cost and TCO raised in 83% of ANZ won calls — highest theme in region' },
+    { theme: 'Customization Depth', pct: 73, detail: 'Headless, composable builds — agencies pushing bespoke architecture' },
+    { theme: 'Scalability & Performance', pct: 69, detail: 'BFCM readiness, high traffic — enterprise-grade SLA expectations' },
+    { theme: 'Procurement & Legal', pct: 68, detail: 'Contract terms, RFP process — enterprise buying friction' },
+    { theme: 'Integration & Tech Stack', pct: 67, detail: 'NetSuite, SAP integrations dominant concern in ANZ enterprise deals' },
+    { theme: 'Risk & Concern', pct: 67, detail: 'Migration risk and disruption concerns in two-thirds of ANZ won calls' },
+    { theme: 'Checkout & Payments', pct: 66, detail: 'Shop Pay adoption driving conversion lift narrative' },
+    { theme: 'Growth & Revenue', pct: 57, detail: 'Revenue expansion, new channels — DTC + retail combined' },
+    { theme: 'Implementation Services', pct: 47, detail: 'Strong partner ecosystem (TWP, Overdose) — partners closing deals' },
+    { theme: 'POS & Omnichannel', pct: 46, detail: 'Unified commerce for retail — RM Williams, Hairhouse use cases' },
+    { theme: 'AI & Automation', pct: 44, detail: 'AI readiness scans generating engagement — Connect event anchor' },
+    { theme: 'B2B', pct: 44, detail: 'B2B selling capabilities raised in nearly half of ANZ won calls' },
+    { theme: 'Migration & Replatforming', pct: 40, detail: 'Moving from Magento and BigCommerce — dominant migration path' },
+    { theme: 'Competitive', pct: 34, detail: 'Competitive comparisons in a third of ANZ won calls' },
+    { theme: 'Timeline & Speed', pct: 31, detail: 'Fast go-live vs Magento dev cycles' },
+    { theme: 'International & Multi-Market', pct: 27, detail: 'Cross-border expansion via Markets product' },
+    { theme: 'Security & Compliance', pct: 16, detail: 'Compliance concerns in regulated verticals' },
+    { theme: 'Cross-Border & Marketplace', pct: 14, detail: 'Marketplace integration alongside DTC' },
+    { theme: 'Localisation', pct: 11, detail: 'Local UX expectations discussed occasionally' },
+    { theme: 'Local Payments', pct: 5, detail: 'Local payment methods — low frequency in ANZ' },
+  ],
+  jpn: [
+    { theme: 'Procurement & Legal', pct: 25, detail: 'Procurement discussed in 1 of 4 Japan won calls (n=4, very small sample)' },
+    { theme: 'Checkout & Payments', pct: 25, detail: 'Checkout raised in 1 of 4 Japan won calls (n=4, very small sample)' },
+  ],
+  gcr: [
+    { theme: 'Checkout & Payments', pct: 32, detail: 'Checkout is the top theme in GCR won deals — raised in a third of calls' },
+    { theme: 'Cost & TCO', pct: 16, detail: 'Cost discussed at lower rate than other regions' },
+    { theme: 'Procurement & Legal', pct: 16, detail: 'Procurement process raised in some GCR won calls' },
+    { theme: 'Risk & Concern', pct: 11, detail: 'Risk concerns in about 1 in 10 GCR won calls' },
+    { theme: 'Timeline & Speed', pct: 11, detail: 'Timeline raised occasionally in GCR' },
+    { theme: 'Scalability & Performance', pct: 11, detail: 'Scalability discussed in some GCR won calls' },
+    { theme: 'POS & Omnichannel', pct: 11, detail: 'POS/omnichannel raised in some GCR won calls' },
+    { theme: 'B2B', pct: 11, detail: 'B2B capabilities discussed in some GCR won calls' },
+    { theme: 'International & Multi-Market', pct: 11, detail: 'International expansion discussed in some GCR calls' },
+    { theme: 'Integration & Tech Stack', pct: 5, detail: 'Integration raised at low rate in GCR won deals' },
+    { theme: 'Implementation Services', pct: 5, detail: 'Implementation support raised at low rate' },
+    { theme: 'Customization Depth', pct: 5, detail: 'Customization discussed occasionally' },
+    { theme: 'Migration & Replatforming', pct: 5, detail: 'Migration raised at low rate in GCR' },
+    { theme: 'AI & Automation', pct: 5, detail: 'AI mentioned at low rate in GCR won deals' },
+    { theme: 'Local Payments', pct: 5, detail: 'Local payment methods raised occasionally' },
+  ],
+  roa: [
+    { theme: 'Integration & Tech Stack', pct: 81, detail: 'Integration is the #1 theme in ROA won deals — marketplace + DTC connectivity' },
+    { theme: 'Cost & TCO', pct: 78, detail: 'Cost and TCO raised in over three-quarters of ROA won calls' },
+    { theme: 'Procurement & Legal', pct: 75, detail: 'Procurement process raised at high rate in ROA' },
+    { theme: 'Customization Depth', pct: 75, detail: 'Customization depth discussed in three-quarters of ROA won calls' },
+    { theme: 'Risk & Concern', pct: 72, detail: 'Risk concerns raised at high rate in ROA' },
+    { theme: 'Scalability & Performance', pct: 66, detail: 'Scalability expectations in two-thirds of ROA won calls' },
+    { theme: 'Checkout & Payments', pct: 53, detail: 'Checkout and local payment methods in over half of ROA won calls' },
+    { theme: 'Implementation Services', pct: 50, detail: 'Partner availability in SEA growing but still thin' },
+    { theme: 'Growth & Revenue', pct: 50, detail: 'Market expansion, new channels — SEA merchants scaling DTC' },
+    { theme: 'POS & Omnichannel', pct: 47, detail: 'Unified commerce for retail — growing interest in ROA' },
+    { theme: 'Timeline & Speed', pct: 47, detail: 'Speed to launch valued in ROA won deals' },
+    { theme: 'Migration & Replatforming', pct: 47, detail: 'Replatforming discussed in nearly half of ROA won calls' },
+    { theme: 'Competitive', pct: 41, detail: 'Competitive comparisons in over 4 out of 10 ROA won calls' },
+    { theme: 'International & Multi-Market', pct: 38, detail: 'Cross-border and multi-market in over a third of ROA calls' },
+    { theme: 'AI & Automation', pct: 38, detail: 'AI and automation discussed in over a third of ROA won calls' },
+    { theme: 'B2B', pct: 38, detail: 'B2B capabilities raised in over a third of ROA won calls' },
+    { theme: 'Security & Compliance', pct: 34, detail: 'Security and compliance raised at higher rate than other regions' },
+    { theme: 'Localisation', pct: 22, detail: 'Localisation discussed in about 1 in 5 ROA won calls' },
+    { theme: 'Local Payments', pct: 9, detail: 'Local payment methods raised occasionally' },
+    { theme: 'Cross-Border & Marketplace', pct: 9, detail: 'Marketplace-to-DTC motion discussed in some ROA calls' },
+  ]
+};
+
+const lostData = {
+  all: [
+    { theme: 'Cost & TCO', pct: 84, detail: 'Cost is the #1 objection in lost deals — raised in 84% of calls across APAC' },
+    { theme: 'Checkout & Payments', pct: 70, detail: 'Checkout and payment concerns in 70% of lost calls — higher than won deals' },
+    { theme: 'Customization Depth', pct: 70, detail: 'Headless, composable, bespoke — merchants wanting more flexibility than Plus provides' },
+    { theme: 'Integration & Tech Stack', pct: 69, detail: 'Inability to connect with existing ERP/systems — deal breaker for enterprise' },
+    { theme: 'Risk & Concern', pct: 68, detail: 'Fear of disruption, migration risk, downtime during transition' },
+    { theme: 'Procurement & Legal', pct: 67, detail: 'Contract terms, RFP process, security questionnaires — enterprise friction' },
+    { theme: 'Growth & Revenue', pct: 65, detail: 'Growth expectations raised more in lost deals — merchants may feel growth story insufficient' },
+    { theme: 'Scalability & Performance', pct: 60, detail: 'Scalability concerns in 60% of lost calls — similar to won deals' },
+    { theme: 'Implementation Services', pct: 58, detail: 'Insufficient local partner support or SI capacity — especially Japan & GCR' },
+    { theme: 'POS & Omnichannel', pct: 44, detail: 'POS and omnichannel raised in 44% of lost calls' },
+    { theme: 'B2B', pct: 44, detail: 'B2B capabilities discussed at same rate in won and lost calls' },
+    { theme: 'Competitive', pct: 43, detail: 'Competitive comparisons raised more frequently in lost deals than won' },
+    { theme: 'Migration & Replatforming', pct: 41, detail: 'Migration concerns in 41% of lost calls' },
+    { theme: 'AI & Automation', pct: 39, detail: 'AI discussed at same rate in won and lost — but lost deals cite unclear roadmap' },
+    { theme: 'International & Multi-Market', pct: 32, detail: 'Cross-border expansion discussed more in lost deals than won' },
+    { theme: 'Timeline & Speed', pct: 30, detail: 'Timeline concerns in about 3 out of 10 lost calls' },
+    { theme: 'Security & Compliance', pct: 19, detail: 'Security concerns in regulated verticals' },
+    { theme: 'Cross-Border & Marketplace', pct: 12, detail: 'Marketplace-to-DTC motion discussed in some lost calls' },
+    { theme: 'Local Payments', pct: 11, detail: 'Local payment method gaps — higher in lost than won deals' },
+    { theme: 'Localisation', pct: 10, detail: 'Local language and UX expectations not met' },
+  ],
+  anz: [
+    { theme: 'Cost & TCO', pct: 90, detail: 'Cost is raised in 9 out of 10 ANZ lost calls — highest rate across all regions' },
+    { theme: 'Integration & Tech Stack', pct: 76, detail: 'NetSuite, SAP, specific local ERP connections — integration is #2 in ANZ losses' },
+    { theme: 'Checkout & Payments', pct: 73, detail: 'Checkout concerns in nearly three-quarters of ANZ lost calls' },
+    { theme: 'Procurement & Legal', pct: 72, detail: 'Procurement and legal friction in 72% of ANZ lost calls' },
+    { theme: 'Risk & Concern', pct: 72, detail: 'Migration disruption risk — especially for high-traffic retail sites' },
+    { theme: 'Growth & Revenue', pct: 71, detail: 'Growth expectations raised in over 7 out of 10 ANZ lost calls' },
+    { theme: 'Customization Depth', pct: 70, detail: 'Headless builds, bespoke frontends — agencies pushing composable architecture' },
+    { theme: 'Scalability & Performance', pct: 68, detail: 'Scalability concerns in over two-thirds of ANZ lost calls' },
+    { theme: 'Implementation Services', pct: 58, detail: 'Implementation support concerns in over half of ANZ lost calls' },
+    { theme: 'POS & Omnichannel', pct: 49, detail: 'POS/omnichannel raised in nearly half of ANZ lost calls' },
+    { theme: 'B2B', pct: 46, detail: 'B2B capabilities discussed in nearly half of ANZ lost calls' },
+    { theme: 'AI & Automation', pct: 45, detail: 'AI discussed at similar rate to won — but lost deals cite unclear delivery' },
+    { theme: 'Migration & Replatforming', pct: 41, detail: 'Migration concerns in over 4 out of 10 ANZ lost calls' },
+    { theme: 'Competitive', pct: 41, detail: 'Competitive comparisons in over 4 out of 10 ANZ lost calls' },
+    { theme: 'International & Multi-Market', pct: 33, detail: 'Cross-border expansion discussed in a third of ANZ lost calls' },
+    { theme: 'Timeline & Speed', pct: 28, detail: 'Timeline concerns in about 3 out of 10 ANZ lost calls' },
+    { theme: 'Security & Compliance', pct: 18, detail: 'Security concerns in regulated verticals' },
+    { theme: 'Local Payments', pct: 10, detail: 'Local payment methods — low frequency in ANZ' },
+    { theme: 'Localisation', pct: 10, detail: 'Localisation discussed occasionally in ANZ lost calls' },
+    { theme: 'Cross-Border & Marketplace', pct: 10, detail: 'Marketplace integration discussed in some ANZ lost calls' },
+  ],
+  jpn: [
+    { theme: 'Integration & Tech Stack', pct: 50, detail: 'Integration raised in 1 of 2 Japan lost calls (n=2, very small sample)' },
+  ],
+  gcr: [
+    { theme: 'Cost & TCO', pct: 43, detail: 'Cost raised in 43% of GCR lost calls' },
+    { theme: 'Checkout & Payments', pct: 43, detail: 'Checkout concerns tied with cost as top GCR lost theme' },
+    { theme: 'Customization Depth', pct: 36, detail: 'Customization depth discussed in over a third of GCR lost calls' },
+    { theme: 'Growth & Revenue', pct: 36, detail: 'Growth expectations discussed in over a third of GCR lost calls' },
+    { theme: 'Risk & Concern', pct: 29, detail: 'Risk concerns in about 3 out of 10 GCR lost calls' },
+    { theme: 'Integration & Tech Stack', pct: 29, detail: 'Integration concerns in about 3 out of 10 GCR lost calls' },
+    { theme: 'Procurement & Legal', pct: 21, detail: 'Procurement process raised in some GCR lost calls' },
+    { theme: 'Implementation Services', pct: 21, detail: 'Implementation support raised in some GCR lost calls' },
+    { theme: 'Scalability & Performance', pct: 21, detail: 'Scalability discussed in some GCR lost calls' },
+    { theme: 'Competitive', pct: 21, detail: 'Competitive comparisons in some GCR lost calls' },
+    { theme: 'AI & Automation', pct: 21, detail: 'AI discussed in some GCR lost calls' },
+    { theme: 'Timeline & Speed', pct: 14, detail: 'Timeline concerns in some GCR lost calls' },
+    { theme: 'Migration & Replatforming', pct: 14, detail: 'Migration raised in some GCR lost calls' },
+    { theme: 'POS & Omnichannel', pct: 14, detail: 'POS raised in some GCR lost calls' },
+    { theme: 'B2B', pct: 14, detail: 'B2B discussed in some GCR lost calls' },
+    { theme: 'Security & Compliance', pct: 7, detail: 'Security raised at low rate in GCR lost calls' },
+    { theme: 'International & Multi-Market', pct: 7, detail: 'International discussed at low rate in GCR' },
+    { theme: 'Local Payments', pct: 7, detail: 'Local payments raised at low rate' },
+    { theme: 'Localisation', pct: 7, detail: 'Localisation raised at low rate in GCR' },
+  ],
+  roa: [
+    { theme: 'Customization Depth', pct: 92, detail: 'Customization is the #1 objection in ROA lost deals — raised in 92% of calls' },
+    { theme: 'Cost & TCO', pct: 88, detail: 'Cost raised in 88% of ROA lost calls — second highest theme' },
+    { theme: 'Implementation Services', pct: 80, detail: 'Implementation support is a major gap — raised in 80% of ROA lost calls' },
+    { theme: 'Risk & Concern', pct: 80, detail: 'Risk concerns raised in 80% of ROA lost calls' },
+    { theme: 'Checkout & Payments', pct: 80, detail: 'Checkout and payment concerns in 80% of ROA lost calls' },
+    { theme: 'Procurement & Legal', pct: 76, detail: 'Procurement process friction in over three-quarters of ROA lost calls' },
+    { theme: 'Integration & Tech Stack', pct: 68, detail: 'Integration concerns in over two-thirds of ROA lost calls' },
+    { theme: 'Growth & Revenue', pct: 64, detail: 'Growth expectations raised in nearly two-thirds of ROA lost calls' },
+    { theme: 'Competitive', pct: 64, detail: 'Competitive comparisons in nearly two-thirds of ROA lost calls' },
+    { theme: 'Migration & Replatforming', pct: 60, detail: 'Migration concerns raised at high rate in ROA lost deals' },
+    { theme: 'Scalability & Performance', pct: 56, detail: 'Scalability concerns in over half of ROA lost calls' },
+    { theme: 'B2B', pct: 56, detail: 'B2B capabilities discussed in over half of ROA lost calls' },
+    { theme: 'POS & Omnichannel', pct: 48, detail: 'POS raised in nearly half of ROA lost calls' },
+    { theme: 'Timeline & Speed', pct: 48, detail: 'Timeline concerns in nearly half of ROA lost calls' },
+    { theme: 'International & Multi-Market', pct: 44, detail: 'International expansion discussed in over 4 out of 10 ROA calls' },
+    { theme: 'AI & Automation', pct: 32, detail: 'AI discussed at lower rate in ROA lost calls vs won' },
+    { theme: 'Security & Compliance', pct: 28, detail: 'Security raised at higher rate in ROA than other regions' },
+    { theme: 'Cross-Border & Marketplace', pct: 28, detail: 'Marketplace-to-DTC motion discussed in over a quarter of ROA lost calls' },
+    { theme: 'Local Payments', pct: 20, detail: 'Local payment gaps in 1 out of 5 ROA lost calls' },
+    { theme: 'Localisation', pct: 16, detail: 'Localisation discussed in some ROA lost calls' },
+  ]
+};
+
+const signalsData = [
+  { source: '#new-markets-growth-talk', date: 'Mar 21, 2026', title: 'Plus Self-Serve launching in GCR', body: 'Merchants in GCR can now self-upgrade to Plus. Agencies have greater incentive and flexibility to drive scale. Expected to unlock mid-market volume.', tags: ['product', 'market'] },
+  { source: '#new-markets-growth-talk', date: 'Mar 21, 2026', title: 'Smart Market Recommendations shipping', body: 'Enhanced storefront localization through language and app recommendations based on target markets. Driving adoption of Markets product.', tags: ['product'] },
+  { source: '#new-markets-growth-talk', date: 'Mar 21, 2026', title: 'China/HK reframed as +$1.9M CPV opportunity', body: 'New analysis shows buyer-country share (vs merchant-country) better represents Shopify presence. China total CPV shifts by +125% from baseline when accounting for cross-border billing patterns.', tags: ['market'] },
+  { source: '#new-markets-growth-talk', date: 'Mar 21, 2026', title: 'Regulatory Radar launched', body: 'New system surfaces international regulatory changes early, estimates business impact, and flags what to fix before growth is affected. Proactive compliance monitoring.', tags: ['product', 'risk'] },
+  { source: '#new-markets-growth-talk', date: 'Oct 2025', title: 'China/HK Export — greenlit as priority market', body: 'Addressable market worth $36.55B — larger than Japan and Mexico combined. Apparel declining (~30-40% of GMV) but Europe growing as export destination (>30% of GMV). Current base is 71% core plan — upgrade opportunity.', tags: ['market'] },
+  { source: '#new-markets-growth-talk', date: 'Jul 2025', title: 'Japan gross adds +110% YoY', body: 'Continuing off record Q2 (+114% YoY, +70% vs Q1). Japan remains one of the fastest growing markets globally. Mobile app checkout conversion still problematic in APAC.', tags: ['market'] },
+  { source: '#new-markets-growth-talk', date: 'Oct 2025', title: 'Add-platformers — critical APAC segment', body: 'Discovery work shows merchants add Shopify for growth, reduced marketplace fees, brand/customer control. Common challenge: customer acquisition for DTC channel. Most installed app categories: ads + marketplaces.', tags: ['market'] },
+  { source: '#market-insights-team', date: 'Jan 2025', title: 'Japan Marketing Research — awareness gap', body: 'Only ~25% of viewers could accurately define Shopify as an eCommerce platform from video ads. Nearly half didn\'t know what Shopify does. Need concrete, simple messaging with real merchant stories.', tags: ['market', 'risk'] },
+  { source: '#market-insights-team', date: 'Oct 2025', title: 'Holiday Retail Report — AI adoption signal', body: '64% of shoppers plan to use AI for holiday shopping. Unified commerce no longer optional. Brands harmonizing online/offline/social touchpoints will win.', tags: ['market'] },
+  { source: '#competitor-intelligence', date: 'Mar 2026', title: 'Magento FUD on Network Intelligence in ANZ deals', body: 'Magento actively spreading FUD about Shopify Network Intelligence requirements in APAC deals. CSM flagged need for competitive response asset / technical explainer for sales reps facing Magento competitive situations.', tags: ['competitor', 'risk'] },
+  { source: '#competitor-intelligence', date: 'Q1 2026', title: 'APAC competitive win pattern: Magento displacement accelerating', body: 'Multiple Q1 wins displacing Adobe Commerce in ANZ: PSW Uniform Group ($290K PBR), Urban Brew ($201K, "growth on Magento was tough"), Academy Uniforms ($143K), Omni Group ($169K, chose Shopify over BigC + Magento for Microsoft Dynamics connector). Pattern: mid-market Magento merchants hitting flexibility ceiling.', tags: ['competitor'] },
+  { source: '#competitor-intelligence', date: 'Mar 2026', title: 'Shopline compete one-pager in build for GCR', body: 'GCR sales team working with Ruder Finn to develop Shopify vs Shopline compete material. Shopline positioning as APAC-native with deeper local marketplace integrations and built-in WeChat/Alipay. Key differentiator for Shopify: global expansion stores, AI/agentic narrative, enterprise scalability.', tags: ['competitor'] },
+  { source: '#competitor-intelligence', date: 'Mar 2026', title: 'NIO Firefly (蔚来) chose Shopify Plus over custom build in GCR', body: 'Global EV brand Firefly chose Plus for multi-entity expansion stores across international markets. Custom build displacement — Shopify won on scalable global growth + localization. $164K PBR. Signal: even automotive/EV brands evaluating Shopify for DTC.', tags: ['competitor', 'market'] },
+  { source: '#competitor-intelligence', date: 'Feb 2026', title: 'Shopware offering 2 years free + services in EMEA', body: 'Shopware offering 2 years free licenses + professional services in EMEA mid-market. Salesforce bundling Commerce Cloud at $40K flat fee. Risk spreading to APAC as global enterprise competitors use aggressive pricing to defend share. Talk track: "desperate measures for desperate techs."', tags: ['competitor', 'risk'] },
+  { source: '#competitor-intelligence', date: 'Mar 2026', title: 'River competitive-positioning skill — top 5 request for APAC sales', body: 'Competitive material against Shopware, BigCommerce, and Magento is the #3 most requested skill from APAC sales reps. Gap: no structured competitive intelligence — reps searching Slack threads. Battle card templates, win/loss patterns by competitor, and case study references identified as priority build.', tags: ['competitor'] },
+];
+
+const competitiveData = [
+  { name: 'Adobe Commerce (Magento)', cls: 'magento', share: '~9.2% global market share, ~24% APAC install base',
+    bullets: [
+      'New SaaS deployment model (ACCS) launched June 2025 — competing with Shopify on ease of deployment',
+      'License fees $22K-$190K+/yr — TCO 2-3x license. Positioned for $5M+ revenue businesses',
+      '60% of new Magento developments now use headless architecture (Hyvä frontend)',
+      'Strong in B2B: ~60% of Fortune 1000 D2C channels run Adobe Commerce',
+      'APAC threat: deep ERP integration capabilities and data residency compliance appeal to JP/GCR enterprise',
+      'Weakness: implementation complexity, cost, slow time-to-value vs Shopify Plus'
+    ]},
+  { name: 'Salesforce Commerce Cloud', cls: 'sfcc', share: '~0.29% by store count, but powers largest enterprise merchants',
+    bullets: [
+      'Low store count but very high GMV per store — Patagonia, PUMA, Adidas',
+      'Top 3 geos: US (55%), UK (9%), Germany (7%) — APAC presence thin but growing',
+      'Bundling Commerce Cloud with broader Salesforce suite at aggressive pricing ($40K flat fee in EMEA)',
+      'In APAC: competing mainly in LA/Enterprise segment with existing Salesforce CRM customers',
+      'Weakness: total cost of Salesforce ecosystem, implementation timelines (6-18 months)',
+      'Japan: Humanmade (former Shopify merchant) migrated to SFCC — cited flash sale limitations'
+    ]},
+  { name: 'Shopline', cls: 'shopline', share: '~0.03% global, 600K+ merchants, concentrated in GCR/Taiwan/SEA',
+    bullets: [
+      'Founded Hong Kong 2013, backed by Alibaba Entrepreneurs Fund — $48.2M raised',
+      'Key markets: China (32%), Taiwan (27%), US (20%) — expanding Malaysia, Vietnam',
+      'Competes directly with Shopify in GCR on price + local marketplace integrations',
+      'Built-in WeChat, Alipay, local payment integrations vs Shopify requiring apps',
+      'Omnichannel POS included — positioning as APAC-native alternative',
+      'GCR sales team building Shopify vs Shopline compete one-pager with Ruder Finn',
+      'Weakness: limited international expansion beyond APAC, smaller app ecosystem'
+    ]},
+  { name: 'EC-Being', cls: 'ecbeing', share: 'Japan enterprise leader — not tracked in global market share reports',
+    bullets: [
+      'Dominant in Japan enterprise ecommerce — deep local feature set',
+      'Strong in: cash closing, reduced tax support, staff tracking, J-SOX compliance',
+      'Pricing significantly more competitive than Shopify Plus in Japan',
+      'Key advantage: native Japanese admin, local logistics integrations, compliance built-in',
+      'Many Shopify Japan lost deals cite EC-Being or local platforms as alternative',
+      'Weakness: no international expansion capability, no cross-border/Markets equivalent',
+      'Shopify opportunity: win on unified commerce, AI/agentic narrative, global expansion stores'
+    ]},
+];
+
+// ============================================================
+// RESEARCH LIBRARY DATA
+// To add a new report: copy a row below and update fields
+// type: 'pdf' | 'slides' | 'doc' | 'video'
+// region: 'apac' | 'anz' | 'jpn' | 'gcr' | 'roa'
+// ============================================================
+const researchData = [
+  { title: 'Shopify Global Holiday Retail Report 2025', agency: 'Shopify External Comms + Research', date: 'Oct 2025', type: 'doc', region: 'apac',
+    url: 'https://www.shopifyholidayretail.com/',
+    desc: '18K consumers and 7.5K SMB owners across NA, APAC and E5. Key findings: 64% of shoppers plan to use AI for holiday shopping, unified commerce no longer optional, speed and transparency drive loyalty.',
+    tags: ['consumer', 'ai', 'unified commerce'] },
+  { title: 'Japan Marketing Relaunch — Video Ad & Free Trial Research', agency: 'Market Insights Team (Internal)', date: 'Jan 2025', type: 'slides', region: 'jpn',
+    url: 'https://docs.google.com/presentation/d/1n4tgt70PHWB8-2ruyYOj6hcUmGch4dlcjc_-S-Xr2Ak/edit',
+    desc: 'Only ~25% of Japanese viewers could accurately define Shopify from video ads. Recommendation: concrete, simple messaging with real merchant stories. Competitor BASE landing page cited as best practice.',
+    tags: ['awareness', 'japan', 'creative'] },
+  { title: 'Australia Post eCommerce Report — AI Commerce 2030', agency: 'Australia Post', date: 'Mar 2026', type: 'pdf', region: 'anz',
+    url: '#',
+    desc: 'Projects AI agents could influence 30% of digital transactions by 2030. Features Shopify data. Supports Agentic Commerce narrative for ANZ market.',
+    tags: ['ai', 'anz', 'market sizing'] },
+  { title: 'Gartner Magic Quadrant — Digital Commerce (Translated JP)', agency: 'Gartner', date: 'Q1 2026', type: 'pdf', region: 'jpn',
+    url: '#',
+    desc: 'Translated Gartner MQ for Japan trust-building program. Shopify positioned as Leader. Used in LA press releases and enterprise sales enablement.',
+    tags: ['analyst', 'trust', 'japan'] },
+  { title: 'China/HK Export Market Sizing & Opportunity Analysis', agency: 'International Growth Team', date: 'Oct 2025', type: 'slides', region: 'gcr',
+    url: 'https://docs.google.com/presentation/d/1gttt46WLPnMC1svkL4KeGvFJaezLvXBL39pRltjyOgY/edit',
+    desc: 'Addressable market worth $36.55B — larger than Japan and Mexico combined. Apparel declining (~30-40% GMV) but Europe growing as export destination (>30%). 71% of current base on core plan.',
+    tags: ['market sizing', 'gcr', 'export'] },
+  { title: 'International Competitor Landscape — Top Platforms by Market', agency: 'Market Insights Team', date: 'Oct 2025', type: 'doc', region: 'apac',
+    url: 'https://docs.google.com/spreadsheets/d/18KUXxUKCjJkSpM8vfwDGfE0iD2mtEVN56czoU9Z_D8c/edit',
+    desc: 'Compiled using BuiltWith, Statista, and internal research. Covers top competitors by country including Shopline (GCR), EC-Being (JP), Magento, SFCC. Store Leads data cross-referenced.',
+    tags: ['competitive', 'market share'] },
+  { title: 'APAC Add-Platformer Discovery Research', agency: 'International Growth Team', date: 'Oct 2025', type: 'slides', region: 'apac',
+    url: '#',
+    desc: 'Merchants adding Shopify alongside marketplaces. Motivations: growth, reduced fees, brand control. Challenges: customer acquisition, SEO, marketing. Most installed apps: ads + marketplaces.',
+    tags: ['market', 'marketplace', 'discovery'] },
+  { title: 'Japan Enterprise Prospect Insights', agency: 'Chello x The Curious Co', date: 'Jan 2025', type: 'slides', region: 'jpn',
+    url: 'https://docs.google.com/presentation/d/1q14IpQV_h3pSLAkysdipU4s8FXF9k14HUotUuUpbRFc/edit',
+    desc: '6 x 1:1 interviews with Plus prospects (JPY 400M–6B+ GMV). Key findings: Shopify = "Doraemon" (innovative problem-solver) but weak marketing presence vs local competitors. Innovation message resonates most; Conversion/checkout weakest (not a JP term). Amazon Pay removal is critical risk. Super Studio actively positioning as "Japanese Shopify alternative." Competitors have better ad recall. Recommendations: case studies, localization, face-to-face events, local payment integration, proactive Partner introductions.',
+    tags: ['brand research', 'japan', 'competitive', 'messaging'] },
+  { title: 'ABM 1.0 Japan — H2 2025 Recap & Learnings', agency: 'Office Kage + Maroo + xGrowth', date: 'Dec 2025', type: 'slides', region: 'jpn',
+    url: '#',
+    desc: '482 target accounts, 329 contacted (131% target), 10 SALs (4 SDR + 3 webinar + 3 media). CxO physical letter: 6% deal rate. Key learning: contact→engage conversion critically low (11% vs 30% target).',
+    tags: ['abm', 'japan', 'campaign results'] },
+  { title: 'Country Reframing Analysis — Buyer vs Merchant Country', agency: 'International Data Team', date: 'Mar 2026', type: 'doc', region: 'apac',
+    url: 'https://country-reframing.quick.shopify.io/',
+    desc: 'Buyer-country share is a stronger representation of Shopify presence than merchant-country. China CPV shifts +$1.9M (+125%) when accounting for cross-border billing patterns.',
+    tags: ['data', 'market sizing', 'gcr'] },
+];
+
+// ============================================================
+// SEGMENT DATA — Sliced by Plus / Mid-Market / SMB
+// When refreshing quarterly, add segment breakouts from query
+// ============================================================
+const wonSegmentData = {
+  large_accounts: {
+    all: { n: 23, data: [
+      { theme: 'Cost & TCO', pct: 70, detail: 'Cost and TCO raised in 70% of Large Account won calls across APAC' },
+      { theme: 'Customization Depth', pct: 70, detail: 'Customization depth tied with cost as top LA won theme' },
+      { theme: 'Procurement & Legal', pct: 65, detail: 'Procurement process raised in nearly two-thirds of LA won calls' },
+      { theme: 'Scalability & Performance', pct: 61, detail: 'BFCM readiness, high traffic guarantees — enterprise-grade SLA expectations' },
+      { theme: 'Integration & Tech Stack', pct: 57, detail: 'ERP/API connectivity critical — NetSuite, SAP dominate' },
+      { theme: 'Risk & Concern', pct: 57, detail: 'Risk concerns in over half of LA won calls' },
+      { theme: 'Checkout & Payments', pct: 52, detail: 'Checkout raised in over half of LA won calls' },
+      { theme: 'Timeline & Speed', pct: 43, detail: 'Faster go-live than SFCC/Magento — time to value wins LA deals' },
+      { theme: 'International & Multi-Market', pct: 35, detail: 'Markets product for multi-entity expansion stores' },
+      { theme: 'AI & Automation', pct: 35, detail: 'Agentic commerce resonating but "when does it ship?" question persists' },
+      { theme: 'Migration & Replatforming', pct: 35, detail: 'Moving from Magento/SFCC — Shopify as modern, faster alternative' },
+      { theme: 'POS & Omnichannel', pct: 35, detail: 'POS and unified commerce raised in over a third of LA won calls' },
+      { theme: 'Growth & Revenue', pct: 30, detail: 'Growth narrative in about 3 out of 10 LA won calls' },
+      { theme: 'Competitive', pct: 30, detail: 'Competitive comparisons in 3 out of 10 LA won calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 26, detail: 'Marketplace-to-DTC and cross-border raised in over a quarter of LA calls' },
+      { theme: 'Implementation Services', pct: 26, detail: 'SI partner support raised in about a quarter of LA won calls' },
+      { theme: 'Security & Compliance', pct: 22, detail: 'Security and compliance in about 1 in 5 LA won calls' },
+      { theme: 'Local Payments', pct: 22, detail: 'Local payment methods raised at higher rate in LA than other segments' },
+      { theme: 'Localisation', pct: 22, detail: 'Localisation discussed in about 1 in 5 LA won calls' },
+      { theme: 'B2B', pct: 17, detail: 'B2B discussed in some LA won calls' },
+    ]},
+    anz: { n: 15, data: [
+      { theme: 'Cost & TCO', pct: 87, detail: 'Cost is the top theme in ANZ LA won deals' },
+      { theme: 'Procurement & Legal', pct: 87, detail: 'Procurement tied with cost at 87% in ANZ LA won calls' },
+      { theme: 'Customization Depth', pct: 87, detail: 'Customization depth also at 87% — three themes dominate ANZ LA' },
+      { theme: 'Scalability & Performance', pct: 80, detail: 'BFCM readiness #1 concern — enterprise-grade SLA expectations' },
+      { theme: 'Integration & Tech Stack', pct: 67, detail: 'NetSuite integration dominant — make or break for ANZ LA deals' },
+      { theme: 'Risk & Concern', pct: 67, detail: 'Risk concerns in two-thirds of ANZ LA won calls' },
+      { theme: 'Checkout & Payments', pct: 67, detail: 'Checkout raised in two-thirds of ANZ LA won calls' },
+      { theme: 'Timeline & Speed', pct: 60, detail: 'Speed to launch valued highly in ANZ LA segment' },
+      { theme: 'POS & Omnichannel', pct: 53, detail: 'Unified commerce for retail chains — RM Williams use case' },
+      { theme: 'Competitive', pct: 47, detail: 'Competitive comparisons in nearly half of ANZ LA won calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 40, detail: 'Cross-border raised in 40% of ANZ LA won calls' },
+      { theme: 'Migration & Replatforming', pct: 40, detail: 'Migration from Magento/SFCC in 40% of ANZ LA calls' },
+      { theme: 'Growth & Revenue', pct: 40, detail: 'Growth narrative in 40% of ANZ LA won calls' },
+      { theme: 'Local Payments', pct: 33, detail: 'Local payment methods raised at higher rate in LA segment' },
+      { theme: 'AI & Automation', pct: 33, detail: 'AI discussed in a third of ANZ LA won calls' },
+      { theme: 'Security & Compliance', pct: 33, detail: 'Security concerns at higher rate in LA than other ANZ segments' },
+      { theme: 'Implementation Services', pct: 33, detail: 'SI partner support in a third of ANZ LA won calls' },
+      { theme: 'B2B', pct: 27, detail: 'B2B capabilities discussed in about a quarter of ANZ LA calls' },
+      { theme: 'International & Multi-Market', pct: 27, detail: 'International expansion in about a quarter of ANZ LA calls' },
+      { theme: 'Localisation', pct: 20, detail: 'Localisation discussed in 1 in 5 ANZ LA won calls' },
+    ]},
+    jpn: { n: 2, data: [
+      { theme: 'Procurement & Legal', pct: 50, detail: 'Procurement raised in 1 of 2 Japan LA won calls (very small sample)' },
+    ]},
+    roa: { n: 6, data: [
+      { theme: 'International & Multi-Market', pct: 67, detail: 'International expansion is #1 theme in ROA LA won deals' },
+      { theme: 'Cost & TCO', pct: 50, detail: 'Cost raised in half of ROA LA won calls' },
+      { theme: 'Risk & Concern', pct: 50, detail: 'Risk concerns in half of ROA LA won calls' },
+      { theme: 'Integration & Tech Stack', pct: 50, detail: 'Integration raised in half of ROA LA won calls' },
+      { theme: 'Customization Depth', pct: 50, detail: 'Customization in half of ROA LA won calls' },
+      { theme: 'AI & Automation', pct: 50, detail: 'AI discussed in half of ROA LA won calls' },
+      { theme: 'Scalability & Performance', pct: 33, detail: 'Scalability in a third of ROA LA won calls' },
+      { theme: 'Migration & Replatforming', pct: 33, detail: 'Migration raised in a third of ROA LA calls' },
+      { theme: 'Checkout & Payments', pct: 33, detail: 'Checkout raised in a third of ROA LA calls' },
+      { theme: 'Localisation', pct: 33, detail: 'Localisation raised at higher rate in ROA LA segment' },
+      { theme: 'Procurement & Legal', pct: 17, detail: 'Procurement raised occasionally' },
+      { theme: 'Timeline & Speed', pct: 17, detail: 'Timeline raised occasionally' },
+      { theme: 'Implementation Services', pct: 17, detail: 'Implementation raised occasionally' },
+      { theme: 'Growth & Revenue', pct: 17, detail: 'Growth raised occasionally' },
+    ]},
+  },
+  mid_market: {
+    all: { n: 74, data: [
+      { theme: 'Cost & TCO', pct: 66, detail: 'Cost raised in two-thirds of mid-market won calls across APAC' },
+      { theme: 'Integration & Tech Stack', pct: 59, detail: 'Integration is the #2 theme in MM won deals' },
+      { theme: 'Risk & Concern', pct: 58, detail: 'Risk concerns in nearly 6 out of 10 MM won calls' },
+      { theme: 'Procurement & Legal', pct: 58, detail: 'Procurement process raised at similar rate to risk' },
+      { theme: 'Checkout & Payments', pct: 57, detail: 'Checkout and payments in over half of MM won calls' },
+      { theme: 'Customization Depth', pct: 55, detail: 'Customization depth discussed in over half of MM won calls' },
+      { theme: 'Scalability & Performance', pct: 54, detail: 'Scalability expectations in over half of MM won calls' },
+      { theme: 'Implementation Services', pct: 45, detail: 'Implementation support in nearly half of MM won calls' },
+      { theme: 'Growth & Revenue', pct: 38, detail: 'Growth narrative in over a third of MM won calls' },
+      { theme: 'POS & Omnichannel', pct: 38, detail: 'POS raised in over a third of MM won calls' },
+      { theme: 'Migration & Replatforming', pct: 34, detail: 'Migration in about a third of MM won calls' },
+      { theme: 'AI & Automation', pct: 31, detail: 'AI discussed in about 3 out of 10 MM won calls' },
+      { theme: 'Competitive', pct: 30, detail: 'Competitive comparisons in 3 out of 10 MM won calls' },
+      { theme: 'B2B', pct: 30, detail: 'B2B capabilities in 3 out of 10 MM won calls' },
+      { theme: 'International & Multi-Market', pct: 27, detail: 'International expansion in about a quarter of MM calls' },
+      { theme: 'Timeline & Speed', pct: 27, detail: 'Timeline in about a quarter of MM won calls' },
+      { theme: 'Security & Compliance', pct: 16, detail: 'Security raised in some MM won calls' },
+      { theme: 'Localisation', pct: 11, detail: 'Localisation in about 1 in 10 MM won calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 8, detail: 'Cross-border raised occasionally in MM won calls' },
+      { theme: 'Local Payments', pct: 3, detail: 'Local payments at low rate in MM won calls' },
+    ]},
+    anz: { n: 48, data: [
+      { theme: 'Cost & TCO', pct: 83, detail: 'Cost is the top theme in ANZ MM won deals' },
+      { theme: 'Risk & Concern', pct: 75, detail: 'Risk concerns in three-quarters of ANZ MM won calls' },
+      { theme: 'Integration & Tech Stack', pct: 75, detail: 'Integration tied with risk at 75% in ANZ MM' },
+      { theme: 'Procurement & Legal', pct: 71, detail: 'Procurement process in over 7 out of 10 ANZ MM won calls' },
+      { theme: 'Customization Depth', pct: 69, detail: 'Customization depth in nearly 7 out of 10 ANZ MM won calls' },
+      { theme: 'Checkout & Payments', pct: 67, detail: 'Checkout raised in two-thirds of ANZ MM won calls' },
+      { theme: 'Scalability & Performance', pct: 67, detail: 'Scalability in two-thirds of ANZ MM won calls' },
+      { theme: 'Implementation Services', pct: 56, detail: 'Implementation support in over half of ANZ MM won calls' },
+      { theme: 'Growth & Revenue', pct: 46, detail: 'Growth in nearly half of ANZ MM won calls' },
+      { theme: 'Migration & Replatforming', pct: 44, detail: 'Migration in over 4 out of 10 ANZ MM calls' },
+      { theme: 'AI & Automation', pct: 40, detail: 'AI discussed in 40% of ANZ MM won calls' },
+      { theme: 'POS & Omnichannel', pct: 40, detail: 'POS in 40% of ANZ MM won calls' },
+      { theme: 'B2B', pct: 38, detail: 'B2B in over a third of ANZ MM calls' },
+      { theme: 'Competitive', pct: 35, detail: 'Competitive comparisons in over a third of ANZ MM calls' },
+      { theme: 'International & Multi-Market', pct: 33, detail: 'International in a third of ANZ MM calls' },
+      { theme: 'Timeline & Speed', pct: 33, detail: 'Timeline in a third of ANZ MM calls' },
+      { theme: 'Security & Compliance', pct: 21, detail: 'Security raised in about 1 in 5 ANZ MM calls' },
+      { theme: 'Localisation', pct: 10, detail: 'Localisation discussed occasionally' },
+      { theme: 'Cross-Border & Marketplace', pct: 8, detail: 'Cross-border raised occasionally' },
+      { theme: 'Local Payments', pct: 4, detail: 'Local payments at low rate' },
+    ]},
+    gcr: { n: 18, data: [
+      { theme: 'Checkout & Payments', pct: 28, detail: 'Checkout is the top theme in GCR MM won deals' },
+      { theme: 'Cost & TCO', pct: 11, detail: 'Cost raised at lower rate in GCR MM than other regions' },
+      { theme: 'Procurement & Legal', pct: 11, detail: 'Procurement raised in some GCR MM calls' },
+      { theme: 'Risk & Concern', pct: 11, detail: 'Risk raised in some GCR MM calls' },
+      { theme: 'Scalability & Performance', pct: 11, detail: 'Scalability in some GCR MM calls' },
+      { theme: 'POS & Omnichannel', pct: 11, detail: 'POS raised in some GCR MM calls' },
+      { theme: 'B2B', pct: 6, detail: 'B2B raised occasionally in GCR MM' },
+      { theme: 'Integration & Tech Stack', pct: 6, detail: 'Integration raised occasionally' },
+      { theme: 'Customization Depth', pct: 6, detail: 'Customization raised occasionally' },
+      { theme: 'Migration & Replatforming', pct: 6, detail: 'Migration raised occasionally' },
+      { theme: 'Timeline & Speed', pct: 6, detail: 'Timeline raised occasionally' },
+      { theme: 'International & Multi-Market', pct: 6, detail: 'International raised occasionally' },
+      { theme: 'AI & Automation', pct: 6, detail: 'AI raised occasionally' },
+    ]},
+    roa: { n: 8, data: [
+      { theme: 'Cost & TCO', pct: 88, detail: 'Cost is the #1 theme in ROA MM won deals — 88% of calls' },
+      { theme: 'Procurement & Legal', pct: 88, detail: 'Procurement tied with cost at 88% in ROA MM' },
+      { theme: 'Integration & Tech Stack', pct: 88, detail: 'Integration also at 88% — three themes dominate ROA MM' },
+      { theme: 'Customization Depth', pct: 88, detail: 'Customization at 88% in ROA MM won calls' },
+      { theme: 'POS & Omnichannel', pct: 88, detail: 'POS at 88% — unified commerce critical in ROA MM' },
+      { theme: 'Implementation Services', pct: 75, detail: 'Implementation support in three-quarters of ROA MM calls' },
+      { theme: 'Scalability & Performance', pct: 75, detail: 'Scalability in three-quarters of ROA MM calls' },
+      { theme: 'Growth & Revenue', pct: 75, detail: 'Growth in three-quarters of ROA MM calls' },
+      { theme: 'Risk & Concern', pct: 63, detail: 'Risk in nearly two-thirds of ROA MM calls' },
+      { theme: 'Checkout & Payments', pct: 63, detail: 'Checkout in nearly two-thirds of ROA MM calls' },
+      { theme: 'Competitive', pct: 63, detail: 'Competitive comparisons at high rate in ROA MM' },
+      { theme: 'International & Multi-Market', pct: 38, detail: 'International in over a third of ROA MM calls' },
+      { theme: 'AI & Automation', pct: 38, detail: 'AI in over a third of ROA MM calls' },
+      { theme: 'B2B', pct: 38, detail: 'B2B in over a third of ROA MM calls' },
+      { theme: 'Migration & Replatforming', pct: 38, detail: 'Migration in over a third of ROA MM calls' },
+      { theme: 'Timeline & Speed', pct: 38, detail: 'Timeline in over a third of ROA MM calls' },
+      { theme: 'Localisation', pct: 38, detail: 'Localisation at higher rate in ROA MM than other regions' },
+      { theme: 'Security & Compliance', pct: 25, detail: 'Security in a quarter of ROA MM calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 25, detail: 'Cross-border in a quarter of ROA MM calls' },
+    ]},
+  },
+  smb: {
+    all: { n: 125, data: [
+      { theme: 'Cost & TCO', pct: 82, detail: 'Cost is the top theme in SMB won calls across APAC' },
+      { theme: 'Customization Depth', pct: 72, detail: 'Customization depth discussed in nearly three-quarters of SMB won calls' },
+      { theme: 'Scalability & Performance', pct: 66, detail: 'Scalability expectations in two-thirds of SMB won calls' },
+      { theme: 'Integration & Tech Stack', pct: 66, detail: 'Integration tied with scalability at 66%' },
+      { theme: 'Procurement & Legal', pct: 66, detail: 'Procurement also at 66% — surprisingly high for SMB' },
+      { theme: 'Checkout & Payments', pct: 65, detail: 'Shop Pay, express checkout — conversion-first messaging resonates' },
+      { theme: 'Risk & Concern', pct: 64, detail: 'Risk concerns in nearly two-thirds of SMB won calls' },
+      { theme: 'Growth & Revenue', pct: 61, detail: 'Growth narrative resonates strongly with SMB segment' },
+      { theme: 'B2B', pct: 48, detail: 'B2B capabilities in nearly half of SMB won calls' },
+      { theme: 'POS & Omnichannel', pct: 46, detail: 'POS in nearly half of SMB won calls' },
+      { theme: 'AI & Automation', pct: 45, detail: 'Sidekick for solo operators — automate what they cannot hire for' },
+      { theme: 'Implementation Services', pct: 44, detail: 'Implementation support in over 4 out of 10 SMB calls' },
+      { theme: 'Migration & Replatforming', pct: 40, detail: 'Migration in 40% of SMB won calls' },
+      { theme: 'Competitive', pct: 32, detail: 'Competitive comparisons in about a third of SMB calls' },
+      { theme: 'Timeline & Speed', pct: 30, detail: 'Timeline in 3 out of 10 SMB won calls' },
+      { theme: 'International & Multi-Market', pct: 23, detail: 'International expansion in about 1 in 4 SMB calls' },
+      { theme: 'Security & Compliance', pct: 15, detail: 'Security raised in some SMB calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 12, detail: 'Cross-border raised in about 1 in 10 SMB calls' },
+      { theme: 'Localisation', pct: 10, detail: 'Localisation discussed occasionally' },
+      { theme: 'Local Payments', pct: 5, detail: 'Local payments at low rate in SMB' },
+    ]},
+    anz: { n: 106, data: [
+      { theme: 'Cost & TCO', pct: 83, detail: 'Cost is the top theme in ANZ SMB won deals' },
+      { theme: 'Customization Depth', pct: 74, detail: 'Customization in nearly three-quarters of ANZ SMB won calls' },
+      { theme: 'Scalability & Performance', pct: 68, detail: 'Scalability in over two-thirds of ANZ SMB calls' },
+      { theme: 'Checkout & Payments', pct: 66, detail: 'Checkout in two-thirds of ANZ SMB calls' },
+      { theme: 'Growth & Revenue', pct: 65, detail: 'Growth narrative resonates strongly with ANZ SMB' },
+      { theme: 'Integration & Tech Stack', pct: 64, detail: 'Integration in nearly two-thirds of ANZ SMB calls' },
+      { theme: 'Procurement & Legal', pct: 64, detail: 'Procurement at same rate as integration in ANZ SMB' },
+      { theme: 'Risk & Concern', pct: 63, detail: 'Risk concerns in nearly two-thirds of ANZ SMB calls' },
+      { theme: 'B2B', pct: 49, detail: 'B2B in nearly half of ANZ SMB calls' },
+      { theme: 'AI & Automation', pct: 48, detail: 'AI in nearly half of ANZ SMB calls' },
+      { theme: 'POS & Omnichannel', pct: 47, detail: 'POS in nearly half of ANZ SMB calls' },
+      { theme: 'Implementation Services', pct: 44, detail: 'Implementation in over 4 out of 10 ANZ SMB calls' },
+      { theme: 'Migration & Replatforming', pct: 39, detail: 'Migration in nearly 4 out of 10 ANZ SMB calls' },
+      { theme: 'Competitive', pct: 32, detail: 'Competitive comparisons in about a third of ANZ SMB calls' },
+      { theme: 'Timeline & Speed', pct: 26, detail: 'Timeline in about a quarter of ANZ SMB calls' },
+      { theme: 'International & Multi-Market', pct: 24, detail: 'International in about a quarter of ANZ SMB calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 13, detail: 'Cross-border in about 1 in 8 ANZ SMB calls' },
+      { theme: 'Security & Compliance', pct: 11, detail: 'Security raised occasionally' },
+      { theme: 'Localisation', pct: 9, detail: 'Localisation discussed occasionally' },
+      { theme: 'Local Payments', pct: 2, detail: 'Local payments at very low rate in ANZ SMB' },
+    ]},
+    roa: { n: 16, data: [
+      { theme: 'Procurement & Legal', pct: 88, detail: 'Procurement is the top theme in ROA SMB won deals' },
+      { theme: 'Integration & Tech Stack', pct: 88, detail: 'Integration tied with procurement at 88% in ROA SMB' },
+      { theme: 'Cost & TCO', pct: 81, detail: 'Cost in over 8 out of 10 ROA SMB won calls' },
+      { theme: 'Risk & Concern', pct: 81, detail: 'Risk concerns at same rate as cost in ROA SMB' },
+      { theme: 'Customization Depth', pct: 75, detail: 'Customization in three-quarters of ROA SMB won calls' },
+      { theme: 'Scalability & Performance', pct: 69, detail: 'Scalability in nearly 7 out of 10 ROA SMB calls' },
+      { theme: 'Checkout & Payments', pct: 56, detail: 'Checkout in over half of ROA SMB calls' },
+      { theme: 'Migration & Replatforming', pct: 56, detail: 'Migration at higher rate in ROA SMB than other segments' },
+      { theme: 'Timeline & Speed', pct: 56, detail: 'Timeline in over half of ROA SMB calls' },
+      { theme: 'Growth & Revenue', pct: 44, detail: 'Growth in over 4 out of 10 ROA SMB calls' },
+      { theme: 'Implementation Services', pct: 44, detail: 'Implementation support in over 4 out of 10 ROA SMB calls' },
+      { theme: 'B2B', pct: 44, detail: 'B2B in over 4 out of 10 ROA SMB calls' },
+      { theme: 'POS & Omnichannel', pct: 44, detail: 'POS in over 4 out of 10 ROA SMB calls' },
+      { theme: 'Security & Compliance', pct: 44, detail: 'Security at higher rate in ROA SMB than other regions' },
+      { theme: 'Competitive', pct: 38, detail: 'Competitive comparisons in over a third of ROA SMB calls' },
+      { theme: 'AI & Automation', pct: 31, detail: 'AI in about 3 out of 10 ROA SMB calls' },
+      { theme: 'Local Payments', pct: 19, detail: 'Local payment gaps in about 1 in 5 ROA SMB calls' },
+      { theme: 'International & Multi-Market', pct: 19, detail: 'International in about 1 in 5 ROA SMB calls' },
+      { theme: 'Localisation', pct: 13, detail: 'Localisation discussed occasionally' },
+      { theme: 'Cross-Border & Marketplace', pct: 6, detail: 'Cross-border raised occasionally' },
+    ]},
+  },
+};
+
+const lostSegmentData = {
+  large_accounts: {
+    all: { n: 9, data: [
+      { theme: 'Risk & Concern', pct: 56, detail: 'Risk is the top objection in LA lost deals across APAC' },
+      { theme: 'Integration & Tech Stack', pct: 56, detail: 'Integration tied with risk as top LA lost theme' },
+      { theme: 'Customization Depth', pct: 56, detail: 'Customization depth also at 56% — three themes dominate LA losses' },
+      { theme: 'Cost & TCO', pct: 44, detail: 'Cost raised at lower rate than in SMB/MM lost deals' },
+      { theme: 'Procurement & Legal', pct: 44, detail: 'Procurement friction in nearly half of LA lost calls' },
+      { theme: 'Implementation Services', pct: 44, detail: 'Implementation support gaps in nearly half of LA lost calls' },
+      { theme: 'Migration & Replatforming', pct: 44, detail: 'Migration concerns in nearly half of LA lost calls' },
+      { theme: 'Checkout & Payments', pct: 44, detail: 'Checkout concerns in nearly half of LA lost calls' },
+      { theme: 'Scalability & Performance', pct: 33, detail: 'Scalability in a third of LA lost calls' },
+      { theme: 'Competitive', pct: 33, detail: 'Competitive comparisons in a third of LA lost calls' },
+      { theme: 'Growth & Revenue', pct: 33, detail: 'Growth expectations in a third of LA lost calls' },
+      { theme: 'Local Payments', pct: 33, detail: 'Local payment gaps at higher rate in LA lost than other segments' },
+      { theme: 'Security & Compliance', pct: 22, detail: 'Security in about 1 in 5 LA lost calls' },
+      { theme: 'Timeline & Speed', pct: 22, detail: 'Timeline in about 1 in 5 LA lost calls' },
+      { theme: 'B2B', pct: 22, detail: 'B2B discussed in some LA lost calls' },
+      { theme: 'International & Multi-Market', pct: 11, detail: 'International raised occasionally' },
+      { theme: 'POS & Omnichannel', pct: 11, detail: 'POS raised occasionally' },
+      { theme: 'Cross-Border & Marketplace', pct: 11, detail: 'Cross-border raised occasionally' },
+    ]},
+    jpn: { n: 2, data: [
+      { theme: 'Integration & Tech Stack', pct: 50, detail: 'Integration raised in 1 of 2 Japan LA lost calls (very small sample)' },
+    ]},
+    gcr: { n: 2, data: [] },
+    roa: { n: 4, data: [
+      { theme: 'Risk & Concern', pct: 100, detail: 'Risk raised in all ROA LA lost calls (n=4)' },
+      { theme: 'Migration & Replatforming', pct: 100, detail: 'Migration raised in all ROA LA lost calls' },
+      { theme: 'Customization Depth', pct: 100, detail: 'Customization raised in all ROA LA lost calls' },
+      { theme: 'Cost & TCO', pct: 75, detail: 'Cost raised in 3 of 4 ROA LA lost calls' },
+      { theme: 'Procurement & Legal', pct: 75, detail: 'Procurement in 3 of 4 ROA LA lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 75, detail: 'Integration in 3 of 4 ROA LA lost calls' },
+      { theme: 'Implementation Services', pct: 75, detail: 'Implementation support gaps in 3 of 4 ROA LA lost calls' },
+      { theme: 'Checkout & Payments', pct: 75, detail: 'Checkout in 3 of 4 ROA LA lost calls' },
+      { theme: 'Local Payments', pct: 75, detail: 'Local payment gaps in 3 of 4 ROA LA lost calls' },
+      { theme: 'Security & Compliance', pct: 50, detail: 'Security in half of ROA LA lost calls' },
+      { theme: 'Timeline & Speed', pct: 50, detail: 'Timeline in half of ROA LA lost calls' },
+      { theme: 'Scalability & Performance', pct: 50, detail: 'Scalability in half of ROA LA lost calls' },
+      { theme: 'Competitive', pct: 50, detail: 'Competitive in half of ROA LA lost calls' },
+      { theme: 'Growth & Revenue', pct: 50, detail: 'Growth expectations in half of ROA LA lost calls' },
+      { theme: 'B2B', pct: 50, detail: 'B2B in half of ROA LA lost calls' },
+      { theme: 'POS & Omnichannel', pct: 25, detail: 'POS raised in 1 of 4 ROA LA lost calls' },
+    ]},
+  },
+  mid_market: {
+    all: { n: 53, data: [
+      { theme: 'Cost & TCO', pct: 77, detail: 'Cost is the #1 objection in MM lost deals — raised in over three-quarters of calls' },
+      { theme: 'Integration & Tech Stack', pct: 68, detail: 'Integration is the #2 objection in MM lost deals' },
+      { theme: 'Checkout & Payments', pct: 68, detail: 'Checkout tied with integration at 68% in MM lost calls' },
+      { theme: 'Customization Depth', pct: 68, detail: 'Customization also at 68% — four themes cluster at similar rate' },
+      { theme: 'Risk & Concern', pct: 66, detail: 'Risk concerns in two-thirds of MM lost calls' },
+      { theme: 'Procurement & Legal', pct: 62, detail: 'Procurement friction in over 6 out of 10 MM lost calls' },
+      { theme: 'Implementation Services', pct: 60, detail: 'Implementation support gaps in 60% of MM lost calls' },
+      { theme: 'Growth & Revenue', pct: 57, detail: 'Growth expectations in over half of MM lost calls' },
+      { theme: 'Scalability & Performance', pct: 51, detail: 'Scalability in over half of MM lost calls' },
+      { theme: 'AI & Automation', pct: 43, detail: 'AI discussed in over 4 out of 10 MM lost calls' },
+      { theme: 'B2B', pct: 42, detail: 'B2B in over 4 out of 10 MM lost calls' },
+      { theme: 'International & Multi-Market', pct: 42, detail: 'International in over 4 out of 10 MM lost calls' },
+      { theme: 'POS & Omnichannel', pct: 41, detail: 'POS in over 4 out of 10 MM lost calls' },
+      { theme: 'Competitive', pct: 40, detail: 'Competitive comparisons in 40% of MM lost calls' },
+      { theme: 'Migration & Replatforming', pct: 40, detail: 'Migration in 40% of MM lost calls' },
+      { theme: 'Timeline & Speed', pct: 30, detail: 'Timeline in 3 out of 10 MM lost calls' },
+      { theme: 'Security & Compliance', pct: 21, detail: 'Security in about 1 in 5 MM lost calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 15, detail: 'Cross-border raised in some MM lost calls' },
+      { theme: 'Localisation', pct: 11, detail: 'Localisation in about 1 in 10 MM lost calls' },
+      { theme: 'Local Payments', pct: 11, detail: 'Local payments in about 1 in 10 MM lost calls' },
+    ]},
+    anz: { n: 31, data: [
+      { theme: 'Cost & TCO', pct: 84, detail: 'Cost is the top objection in ANZ MM lost deals' },
+      { theme: 'Risk & Concern', pct: 77, detail: 'Risk in over three-quarters of ANZ MM lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 74, detail: 'Integration in nearly three-quarters of ANZ MM lost calls' },
+      { theme: 'Implementation Services', pct: 68, detail: 'Implementation support in over two-thirds of ANZ MM lost calls' },
+      { theme: 'Customization Depth', pct: 68, detail: 'Customization in over two-thirds of ANZ MM lost calls' },
+      { theme: 'Checkout & Payments', pct: 65, detail: 'Checkout in nearly two-thirds of ANZ MM lost calls' },
+      { theme: 'Procurement & Legal', pct: 65, detail: 'Procurement in nearly two-thirds of ANZ MM lost calls' },
+      { theme: 'Growth & Revenue', pct: 61, detail: 'Growth expectations in over 6 out of 10 ANZ MM lost calls' },
+      { theme: 'Scalability & Performance', pct: 58, detail: 'Scalability in over half of ANZ MM lost calls' },
+      { theme: 'AI & Automation', pct: 52, detail: 'AI in over half of ANZ MM lost calls — highest AI rate in any lost segment' },
+      { theme: 'International & Multi-Market', pct: 45, detail: 'International in over 4 out of 10 ANZ MM lost calls' },
+      { theme: 'B2B', pct: 45, detail: 'B2B in over 4 out of 10 ANZ MM lost calls' },
+      { theme: 'POS & Omnichannel', pct: 42, detail: 'POS in over 4 out of 10 ANZ MM lost calls' },
+      { theme: 'Migration & Replatforming', pct: 39, detail: 'Migration in nearly 4 out of 10 ANZ MM lost calls' },
+      { theme: 'Competitive', pct: 39, detail: 'Competitive in nearly 4 out of 10 ANZ MM lost calls' },
+      { theme: 'Timeline & Speed', pct: 26, detail: 'Timeline in about a quarter of ANZ MM lost calls' },
+      { theme: 'Security & Compliance', pct: 19, detail: 'Security in about 1 in 5 ANZ MM lost calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 13, detail: 'Cross-border raised occasionally' },
+      { theme: 'Local Payments', pct: 10, detail: 'Local payments at low rate' },
+      { theme: 'Localisation', pct: 7, detail: 'Localisation raised occasionally' },
+    ]},
+    gcr: { n: 9, data: [
+      { theme: 'Checkout & Payments', pct: 56, detail: 'Checkout is the top theme in GCR MM lost deals' },
+      { theme: 'Cost & TCO', pct: 44, detail: 'Cost in nearly half of GCR MM lost calls' },
+      { theme: 'Customization Depth', pct: 33, detail: 'Customization in a third of GCR MM lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 33, detail: 'Integration in a third of GCR MM lost calls' },
+      { theme: 'Growth & Revenue', pct: 33, detail: 'Growth expectations in a third of GCR MM lost calls' },
+      { theme: 'Procurement & Legal', pct: 22, detail: 'Procurement in some GCR MM lost calls' },
+      { theme: 'Risk & Concern', pct: 22, detail: 'Risk in some GCR MM lost calls' },
+      { theme: 'AI & Automation', pct: 22, detail: 'AI in some GCR MM lost calls' },
+      { theme: 'Implementation Services', pct: 11, detail: 'Implementation raised occasionally' },
+      { theme: 'Scalability & Performance', pct: 11, detail: 'Scalability raised occasionally' },
+      { theme: 'Competitive', pct: 11, detail: 'Competitive raised occasionally' },
+      { theme: 'Migration & Replatforming', pct: 11, detail: 'Migration raised occasionally' },
+      { theme: 'POS & Omnichannel', pct: 11, detail: 'POS raised occasionally' },
+      { theme: 'B2B', pct: 11, detail: 'B2B raised occasionally' },
+      { theme: 'International & Multi-Market', pct: 11, detail: 'International raised occasionally' },
+      { theme: 'Timeline & Speed', pct: 11, detail: 'Timeline raised occasionally' },
+      { theme: 'Local Payments', pct: 11, detail: 'Local payments raised occasionally' },
+    ]},
+    roa: { n: 13, data: [
+      { theme: 'Customization Depth', pct: 92, detail: 'Customization is the #1 objection in ROA MM lost deals' },
+      { theme: 'Cost & TCO', pct: 85, detail: 'Cost in 85% of ROA MM lost calls' },
+      { theme: 'Procurement & Legal', pct: 85, detail: 'Procurement tied with cost at 85%' },
+      { theme: 'Checkout & Payments', pct: 85, detail: 'Checkout also at 85% in ROA MM lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 77, detail: 'Integration in over three-quarters of ROA MM lost calls' },
+      { theme: 'Implementation Services', pct: 77, detail: 'Implementation tied with integration at 77%' },
+      { theme: 'Risk & Concern', pct: 69, detail: 'Risk in nearly 7 out of 10 ROA MM lost calls' },
+      { theme: 'Scalability & Performance', pct: 62, detail: 'Scalability in over 6 out of 10 ROA MM lost calls' },
+      { theme: 'Competitive', pct: 62, detail: 'Competitive in over 6 out of 10 ROA MM lost calls' },
+      { theme: 'Migration & Replatforming', pct: 62, detail: 'Migration in over 6 out of 10 ROA MM lost calls' },
+      { theme: 'Growth & Revenue', pct: 62, detail: 'Growth expectations in over 6 out of 10 ROA MM calls' },
+      { theme: 'POS & Omnichannel', pct: 62, detail: 'POS in over 6 out of 10 ROA MM lost calls' },
+      { theme: 'International & Multi-Market', pct: 54, detail: 'International in over half of ROA MM lost calls' },
+      { theme: 'Timeline & Speed', pct: 54, detail: 'Timeline in over half of ROA MM lost calls' },
+      { theme: 'B2B', pct: 54, detail: 'B2B in over half of ROA MM lost calls' },
+      { theme: 'AI & Automation', pct: 39, detail: 'AI in nearly 4 out of 10 ROA MM lost calls' },
+      { theme: 'Security & Compliance', pct: 39, detail: 'Security in nearly 4 out of 10 ROA MM lost calls' },
+      { theme: 'Localisation', pct: 31, detail: 'Localisation in about 3 out of 10 ROA MM lost calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 31, detail: 'Cross-border in about 3 out of 10 ROA MM lost calls' },
+      { theme: 'Local Payments', pct: 15, detail: 'Local payments in some ROA MM lost calls' },
+    ]},
+  },
+  smb: {
+    all: { n: 73, data: [
+      { theme: 'Cost & TCO', pct: 93, detail: 'Cost is the #1 objection in SMB lost deals — raised in 93% of calls' },
+      { theme: 'Checkout & Payments', pct: 75, detail: 'Checkout in three-quarters of SMB lost calls' },
+      { theme: 'Growth & Revenue', pct: 75, detail: 'Growth expectations tied with checkout at 75%' },
+      { theme: 'Customization Depth', pct: 73, detail: 'Customization in nearly three-quarters of SMB lost calls' },
+      { theme: 'Procurement & Legal', pct: 73, detail: 'Procurement at same rate as customization in SMB lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 71, detail: 'Integration in over 7 out of 10 SMB lost calls' },
+      { theme: 'Risk & Concern', pct: 71, detail: 'Risk at same rate as integration in SMB lost calls' },
+      { theme: 'Scalability & Performance', pct: 70, detail: 'Scalability in 70% of SMB lost calls' },
+      { theme: 'Implementation Services', pct: 58, detail: 'Implementation gaps in nearly 6 out of 10 SMB lost calls' },
+      { theme: 'POS & Omnichannel', pct: 51, detail: 'POS in over half of SMB lost calls' },
+      { theme: 'B2B', pct: 48, detail: 'B2B in nearly half of SMB lost calls' },
+      { theme: 'Competitive', pct: 47, detail: 'Competitive comparisons in nearly half of SMB lost calls' },
+      { theme: 'Migration & Replatforming', pct: 42, detail: 'Migration in over 4 out of 10 SMB lost calls' },
+      { theme: 'AI & Automation', pct: 41, detail: 'AI in over 4 out of 10 SMB lost calls' },
+      { theme: 'Timeline & Speed', pct: 30, detail: 'Timeline in 3 out of 10 SMB lost calls' },
+      { theme: 'International & Multi-Market', pct: 27, detail: 'International in about a quarter of SMB lost calls' },
+      { theme: 'Security & Compliance', pct: 16, detail: 'Security raised in some SMB lost calls' },
+      { theme: 'Localisation', pct: 11, detail: 'Localisation in about 1 in 10 SMB lost calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 10, detail: 'Cross-border raised in about 1 in 10 SMB lost calls' },
+      { theme: 'Local Payments', pct: 8, detail: 'Local payments at low rate in SMB lost calls' },
+    ]},
+    anz: { n: 62, data: [
+      { theme: 'Cost & TCO', pct: 94, detail: 'Cost raised in 94% of ANZ SMB lost calls — highest rate in any view' },
+      { theme: 'Checkout & Payments', pct: 77, detail: 'Checkout in over three-quarters of ANZ SMB lost calls' },
+      { theme: 'Growth & Revenue', pct: 76, detail: 'Growth expectations in over three-quarters of ANZ SMB lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 76, detail: 'Integration at same rate as growth in ANZ SMB lost calls' },
+      { theme: 'Procurement & Legal', pct: 76, detail: 'Procurement also at 76% in ANZ SMB lost calls' },
+      { theme: 'Scalability & Performance', pct: 73, detail: 'Scalability in nearly three-quarters of ANZ SMB lost calls' },
+      { theme: 'Customization Depth', pct: 71, detail: 'Customization in over 7 out of 10 ANZ SMB lost calls' },
+      { theme: 'Risk & Concern', pct: 69, detail: 'Risk in nearly 7 out of 10 ANZ SMB lost calls' },
+      { theme: 'Implementation Services', pct: 53, detail: 'Implementation in over half of ANZ SMB lost calls' },
+      { theme: 'POS & Omnichannel', pct: 53, detail: 'POS in over half of ANZ SMB lost calls' },
+      { theme: 'B2B', pct: 47, detail: 'B2B in nearly half of ANZ SMB lost calls' },
+      { theme: 'Migration & Replatforming', pct: 44, detail: 'Migration in over 4 out of 10 ANZ SMB lost calls' },
+      { theme: 'AI & Automation', pct: 42, detail: 'AI in over 4 out of 10 ANZ SMB lost calls' },
+      { theme: 'Competitive', pct: 42, detail: 'Competitive in over 4 out of 10 ANZ SMB lost calls' },
+      { theme: 'Timeline & Speed', pct: 29, detail: 'Timeline in about 3 out of 10 ANZ SMB lost calls' },
+      { theme: 'International & Multi-Market', pct: 26, detail: 'International in about a quarter of ANZ SMB lost calls' },
+      { theme: 'Security & Compliance', pct: 18, detail: 'Security raised in some ANZ SMB lost calls' },
+      { theme: 'Localisation', pct: 11, detail: 'Localisation in about 1 in 10 ANZ SMB lost calls' },
+      { theme: 'Local Payments', pct: 10, detail: 'Local payments at low rate in ANZ SMB' },
+      { theme: 'Cross-Border & Marketplace', pct: 7, detail: 'Cross-border raised occasionally' },
+    ]},
+    gcr: { n: 3, data: [
+      { theme: 'Cost & TCO', pct: 67, detail: 'Cost in two-thirds of GCR SMB lost calls (n=3, very small sample)' },
+      { theme: 'Risk & Concern', pct: 67, detail: 'Risk in two-thirds of GCR SMB lost calls' },
+      { theme: 'Scalability & Performance', pct: 67, detail: 'Scalability in two-thirds of GCR SMB lost calls' },
+      { theme: 'Customization Depth', pct: 67, detail: 'Customization in two-thirds of GCR SMB lost calls' },
+      { theme: 'Competitive', pct: 67, detail: 'Competitive in two-thirds of GCR SMB lost calls' },
+      { theme: 'Growth & Revenue', pct: 67, detail: 'Growth in two-thirds of GCR SMB lost calls' },
+      { theme: 'Implementation Services', pct: 67, detail: 'Implementation in two-thirds of GCR SMB lost calls' },
+      { theme: 'Procurement & Legal', pct: 33, detail: 'Procurement in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 33, detail: 'Integration in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Migration & Replatforming', pct: 33, detail: 'Migration in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Timeline & Speed', pct: 33, detail: 'Timeline in 1 of 3 GCR SMB lost calls' },
+      { theme: 'POS & Omnichannel', pct: 33, detail: 'POS in 1 of 3 GCR SMB lost calls' },
+      { theme: 'B2B', pct: 33, detail: 'B2B in 1 of 3 GCR SMB lost calls' },
+      { theme: 'AI & Automation', pct: 33, detail: 'AI in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Security & Compliance', pct: 33, detail: 'Security in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Localisation', pct: 33, detail: 'Localisation in 1 of 3 GCR SMB lost calls' },
+      { theme: 'Checkout & Payments', pct: 33, detail: 'Checkout in 1 of 3 GCR SMB lost calls' },
+    ]},
+    roa: { n: 8, data: [
+      { theme: 'Cost & TCO', pct: 100, detail: 'Cost raised in all ROA SMB lost calls' },
+      { theme: 'Implementation Services', pct: 88, detail: 'Implementation is the #2 objection in ROA SMB lost deals' },
+      { theme: 'Customization Depth', pct: 88, detail: 'Customization tied with implementation at 88%' },
+      { theme: 'Risk & Concern', pct: 88, detail: 'Risk also at 88% in ROA SMB lost calls' },
+      { theme: 'Checkout & Payments', pct: 75, detail: 'Checkout in three-quarters of ROA SMB lost calls' },
+      { theme: 'Competitive', pct: 75, detail: 'Competitive in three-quarters of ROA SMB lost calls' },
+      { theme: 'Growth & Revenue', pct: 75, detail: 'Growth expectations in three-quarters of ROA SMB lost calls' },
+      { theme: 'Procurement & Legal', pct: 63, detail: 'Procurement in over 6 out of 10 ROA SMB lost calls' },
+      { theme: 'B2B', pct: 63, detail: 'B2B in over 6 out of 10 ROA SMB lost calls' },
+      { theme: 'Scalability & Performance', pct: 50, detail: 'Scalability in half of ROA SMB lost calls' },
+      { theme: 'Integration & Tech Stack', pct: 50, detail: 'Integration in half of ROA SMB lost calls' },
+      { theme: 'International & Multi-Market', pct: 50, detail: 'International in half of ROA SMB lost calls' },
+      { theme: 'AI & Automation', pct: 38, detail: 'AI in over a third of ROA SMB lost calls' },
+      { theme: 'POS & Omnichannel', pct: 38, detail: 'POS in over a third of ROA SMB lost calls' },
+      { theme: 'Migration & Replatforming', pct: 38, detail: 'Migration in over a third of ROA SMB lost calls' },
+      { theme: 'Timeline & Speed', pct: 38, detail: 'Timeline in over a third of ROA SMB lost calls' },
+      { theme: 'Cross-Border & Marketplace', pct: 38, detail: 'Cross-border in over a third of ROA SMB lost calls' },
+      { theme: 'Local Payments', pct: 20, detail: 'Local payments in 1 in 5 ROA SMB lost calls' },
+    ]},
+  },
+};
+
+// Track active filters per tab
+let wonFilters = { region: 'all', segment: 'all' };
+let lostFilters = { region: 'all', segment: 'all' };
+
+// ============================================================
+// QoQ CHANGE DATA — Q1 2026 vs Q1 2025
+// Replace when re-running quarterly analysis
+// ============================================================
+const qoqData = {
+  won: [
+    { theme: 'Cost & TCO', now: 75, prev: 73, insight: 'Stable — cost and TCO remain the most common theme in won calls, consistent with Q1 2025.' },
+    { theme: 'Customization Depth', now: 67, prev: 64, insight: 'Slight increase — customization depth rising as a discussion point in won deals, up 3pp.' },
+    { theme: 'Procurement & Legal', now: 64, prev: 67, insight: 'Slight decrease — procurement friction down 3pp QoQ, though still raised in nearly two-thirds of won calls.' },
+    { theme: 'Integration & Tech Stack', now: 63, prev: 81, insight: 'Notable drop of 18pp — integration declined significantly as a won deal theme. May indicate improving connector ecosystem or shifting evaluation focus.' },
+    { theme: 'Risk & Concern', now: 62, prev: 63, insight: 'Flat — risk concerns remain steady in won deals.' },
+    { theme: 'Scalability & Performance', now: 62, prev: 60, insight: 'Stable — scalability steady at 62%, consistent with prior quarter.' },
+    { theme: 'Checkout & Payments', now: 61, prev: 67, insight: 'Down 6pp — checkout dropped slightly as a won deal theme compared to Q1 2025.' },
+    { theme: 'Growth & Revenue', now: 50, prev: 51, insight: 'Flat — growth narrative steady in won deals.' },
+    { theme: 'Implementation Services', now: 43, prev: 58, insight: 'Dropped 15pp — implementation services declining as a discussion point, potentially reflecting simpler onboarding or less partner-dependent deals.' },
+    { theme: 'POS & Omnichannel', now: 42, prev: 53, insight: 'Down 11pp — POS/omnichannel decreased in won calls. Japan POS not yet launched; ANZ retail pipeline may be stabilising.' },
+    { theme: 'AI & Automation', now: 39, prev: 45, insight: 'Down 6pp — AI theme slightly lower than Q1 2025 in won deals.' },
+    { theme: 'B2B', now: 39, prev: 54, insight: 'Down 15pp — B2B discussion dropped significantly in won deals. May indicate shift in deal mix toward DTC-focused merchants.' },
+    { theme: 'Migration & Replatforming', now: 38, prev: 44, insight: 'Down 6pp — migration theme declining, possibly as more merchants are net-new rather than replatforming.' },
+    { theme: 'Competitive', now: 32, prev: 39, insight: 'Down 7pp — competitive comparisons less frequent in won deals.' },
+    { theme: 'Timeline & Speed', now: 31, prev: 45, insight: 'Down 14pp — timeline dropped significantly. Merchants may be less time-pressured in Q1 evaluation cycles.' },
+    { theme: 'International & Multi-Market', now: 26, prev: 34, insight: 'Down 8pp — international theme less frequent, though still raised in a quarter of won calls.' },
+    { theme: 'Security & Compliance', now: 17, prev: 23, insight: 'Down 6pp — security concerns declining in won deals.' },
+    { theme: 'Cross-Border & Marketplace', now: 12, prev: 13, insight: 'Flat — cross-border stable at low rate.' },
+    { theme: 'Localisation', now: 11, prev: 16, insight: 'Down 5pp — localisation slightly less frequent in won deals.' },
+    { theme: 'Local Payments', now: 6, prev: 16, insight: 'Down 10pp — local payment theme dropped significantly in won deals. May reflect improving payment coverage or shift in deal geography.' },
+  ],
+  lost: [
+    { theme: 'Cost & TCO', now: 84, prev: 79, insight: 'Up 5pp — cost objections rising in lost deals. Competitors using aggressive pricing (Shopware 2yr free, SFCC $40K bundles).' },
+    { theme: 'Checkout & Payments', now: 70, prev: 73, insight: 'Down 3pp — checkout concerns slightly lower but still raised in 70% of lost calls.' },
+    { theme: 'Customization Depth', now: 70, prev: 73, insight: 'Down 3pp — customization concerns stable, still a major objection.' },
+    { theme: 'Integration & Tech Stack', now: 69, prev: 86, insight: 'Down 17pp — integration concerns dropped significantly in lost deals. Connector ecosystem improvements may be reducing this objection.' },
+    { theme: 'Risk & Concern', now: 68, prev: 72, insight: 'Down 4pp — risk concerns slightly lower in lost deals.' },
+    { theme: 'Procurement & Legal', now: 67, prev: 76, insight: 'Down 9pp — procurement friction decreasing in lost deals, potentially reflecting smoother enterprise processes.' },
+    { theme: 'Growth & Revenue', now: 65, prev: 69, insight: 'Down 4pp — growth expectations slightly lower as an objection in lost deals.' },
+    { theme: 'Scalability & Performance', now: 60, prev: 73, insight: 'Down 13pp — scalability concerns dropped significantly in lost deals.' },
+    { theme: 'Implementation Services', now: 58, prev: 62, insight: 'Down 4pp — implementation concerns slightly lower, new partners onboarding in Japan and GCR.' },
+    { theme: 'POS & Omnichannel', now: 44, prev: 64, insight: 'Down 20pp — POS/omnichannel dropped sharply in lost deals. Significant improvement in this objection area.' },
+    { theme: 'B2B', now: 44, prev: 57, insight: 'Down 13pp — B2B objections declining in lost deals.' },
+    { theme: 'Competitive', now: 43, prev: 54, insight: 'Down 11pp — fewer competitive comparison losses vs same quarter last year.' },
+    { theme: 'Migration & Replatforming', now: 41, prev: 50, insight: 'Down 9pp — migration concerns declining in lost deals.' },
+    { theme: 'AI & Automation', now: 39, prev: 58, insight: 'Down 19pp — AI-related objections dropped significantly. May reflect improved messaging or clearer roadmap communication.' },
+    { theme: 'International & Multi-Market', now: 32, prev: 52, insight: 'Down 20pp — international concerns dropped sharply. Markets product and cross-border improvements likely helping.' },
+    { theme: 'Timeline & Speed', now: 30, prev: 46, insight: 'Down 16pp — timeline objections declining significantly in lost deals.' },
+    { theme: 'Security & Compliance', now: 19, prev: 24, insight: 'Down 5pp — security concerns slightly lower.' },
+    { theme: 'Cross-Border & Marketplace', now: 12, prev: 21, insight: 'Down 9pp — cross-border objections declining in lost deals.' },
+    { theme: 'Local Payments', now: 11, prev: 16, insight: 'Down 5pp — local payment objections improving. Product investment in local methods showing results.' },
+    { theme: 'Localisation', now: 10, prev: 25, insight: 'Down 15pp — localisation objections dropped significantly. Admin language improvements and local UX updates paying off.' },
+  ],
+};
+
+// ============================================================
+// MERCHANT VOICES (VOX POPS) DATA
+// Quotes from call transcripts, events, and research
+// ============================================================
+// Merchant quotes — to be populated with real verbatims from call transcripts
+// Use Variant C of apac_sales_calls_90day_analysis.sql to extract prospect quotes
+const voxPopsData = [];
+
+// ============================================================
+// RENDERING
+// ============================================================
+function renderThemes(containerId, data, barClass, sampleSize) {
+  const el = document.getElementById(containerId);
+  let sampleHtml = '';
+  if (sampleSize !== null && sampleSize !== undefined) {
+    const isSmall = sampleSize < 15;
+    sampleHtml = `<div class="sample-size">Based on <strong>${sampleSize}</strong> calls${isSmall ? ' <span class="warn">Small sample — interpret with caution</span>' : ''}</div>`;
+  }
+  el.innerHTML = sampleHtml + data.map(d => `
+    <div class="theme-card">
+      <div class="theme-label"><span>${d.theme}</span><span class="pct" style="color:${barClass==='green'?'#7ddf64':'#e85a5a'}">${d.pct}%</span></div>
+      <div class="bar-bg"><div class="bar-fill ${barClass}" style="width:${d.pct}%"></div></div>
+      <div class="theme-detail">${d.detail}</div>
+    </div>
+  `).join('');
+}
+
+function renderComparison() {
+  const el = document.getElementById('compare-table');
+  const allThemes = [...new Set([...wonData.all.map(d=>d.theme), ...lostData.all.map(d=>d.theme)])];
+  let html = '<div style="display:grid;grid-template-columns:180px 1fr 40px 40px 40px 1fr;gap:6px;align-items:center;font-size:11px;color:#5a6a4a;padding-bottom:8px;border-bottom:1px solid #2a3a2a;margin-bottom:8px;">' +
+    '<div></div><div style="text-align:right;color:#7ddf64">Won</div><div></div><div style="text-align:center">vs</div><div></div><div style="color:#e85a5a">Lost</div></div>';
+  allThemes.forEach(t => {
+    const w = wonData.all.find(d=>d.theme===t);
+    const l = lostData.all.find(d=>d.theme===t);
+    const wp = w ? w.pct : 0;
+    const lp = l ? l.pct : 0;
+    const delta = wp - lp;
+    const deltaColor = delta > 10 ? '#7ddf64' : delta < -10 ? '#e85a5a' : '#5a6a4a';
+    html += `<div style="display:grid;grid-template-columns:180px 1fr 40px 40px 40px 1fr;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid #1a2a1a;">
+      <div style="font-size:12px;color:#a0b090">${t}</div>
+      <div style="display:flex;justify-content:flex-end"><div style="width:${wp}%;max-width:100%;height:6px;background:linear-gradient(90deg,#2a6a2a,#7ddf64);border-radius:3px;min-width:2px"></div></div>
+      <div style="font-size:11px;text-align:right;color:#7ddf64;font-weight:600">${wp}%</div>
+      <div style="font-size:10px;text-align:center;color:${deltaColor};font-weight:600">${delta>0?'+':''}${delta}</div>
+      <div style="font-size:11px;color:#e85a5a;font-weight:600">${lp}%</div>
+      <div><div style="width:${lp}%;max-width:100%;height:6px;background:linear-gradient(90deg,#6a2a2a,#e85a5a);border-radius:3px;min-width:2px"></div></div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderSignals() {
+  const el = document.getElementById('signals-cards');
+  el.innerHTML = signalsData.map(s => {
+    const tags = s.tags.map(t => {
+      const cls = t === 'risk' ? 'tag-risk' : t === 'competitor' ? 'tag-competitor' : t === 'product' ? 'tag-product' : 'tag-market';
+      return `<span class="card-tag ${cls}">${t}</span>`;
+    }).join('');
+    return `<div class="card">
+      <div class="card-source">${s.source}<span class="card-date">${s.date}</span></div>
+      <div class="card-title">${s.title}</div>
+      <div class="card-body">${s.body}</div>
+      ${tags}
+    </div>`;
+  }).join('');
+}
+
+function renderCompetitive() {
+  const el = document.getElementById('competitive-cards');
+  el.innerHTML = competitiveData.map(c => `
+    <div class="comp-card">
+      <div class="comp-logo ${c.cls}">${c.name}</div>
+      <div class="comp-share">${c.share}</div>
+      <ul class="comp-bullets">${c.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+}
+
+function renderResearch(filter) {
+  const el = document.getElementById('research-cards');
+  const filtered = filter === 'all' ? researchData : researchData.filter(r => r.region === filter);
+  const icons = { pdf: '📄', slides: '📊', doc: '📝', video: '🎥' };
+  el.innerHTML = filtered.length === 0
+    ? '<p style="font-size:13px;color:#5a6a4a;padding:20px;">No reports for this region yet. Add them to the researchData array.</p>'
+    : filtered.map(r => {
+    const tags = r.tags.map(t => `<span class="card-tag tag-market">${t}</span>`).join('');
+    return `<div class="research-card">
+      <div class="research-icon ${r.type}">${icons[r.type]}</div>
+      <div class="research-meta">
+        <div class="research-title"><a href="${r.url}" target="_blank">${r.title}</a></div>
+        <div class="research-agency">${r.agency} · ${r.date}</div>
+        <div class="research-desc">${r.desc}</div>
+        <div class="research-tags">${tags}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterResearch(region, pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderResearch(region);
+}
+
+// Tab switching
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============================================================
+// SEGMENT-AWARE FILTERING
+// ============================================================
+function getFilteredData(type, region, segment) {
+  const baseData = type === 'won' ? wonData : lostData;
+  const segData = type === 'won' ? wonSegmentData : lostSegmentData;
+
+  // If "All Segments" just use the original region data (no sample size)
+  if (segment === 'all') {
+    return { data: baseData[region] || baseData.all, n: null };
+  }
+
+  // If segment is selected, use segment data (with region sub-key if available)
+  const seg = segData[segment];
+  if (!seg) return { data: baseData[region] || baseData.all, n: null };
+  const entry = seg[region] || seg.all;
+  if (!entry) return { data: baseData[region] || baseData.all, n: null };
+  return { data: entry.data, n: entry.n };
+}
+
+function filterWon(filterType, value, pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  wonFilters[filterType] = value;
+  const result = getFilteredData('won', wonFilters.region, wonFilters.segment);
+  renderThemes('won-themes', result.data, 'green', result.n);
+}
+
+function filterLost(filterType, value, pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  lostFilters[filterType] = value;
+  const result = getFilteredData('lost', lostFilters.region, lostFilters.segment);
+  renderThemes('lost-themes', result.data, 'red', result.n);
+}
+
+// Legacy support
+function filterRegion(type, region, pill) {
+  if (type === 'won') filterWon('region', region, pill);
+  else filterLost('region', region, pill);
+}
+
+// ============================================================
+// QoQ RENDERING
+// ============================================================
+let activeQoQType = 'won';
+
+function renderQoQ(type) {
+  activeQoQType = type;
+  const data = qoqData[type];
+  const el = document.getElementById('qoq-grid');
+  const isWon = type === 'won';
+
+  // Sort by absolute delta descending
+  const sorted = [...data].sort((a, b) => Math.abs(b.now - b.prev) - Math.abs(a.now - a.prev));
+
+  el.innerHTML = sorted.map(d => {
+    const delta = d.now - d.prev;
+    const deltaClass = delta > 3 ? 'up' : delta < -3 ? 'down' : 'flat';
+    const arrow = delta > 3 ? '\u2191' : delta < -3 ? '\u2193' : '\u2192';
+    const sign = delta > 0 ? '+' : '';
+    const nowColor = isWon ? '#7ddf64' : '#e85a5a';
+    const prevColor = '#4a5a3a';
+    const nowGrad = isWon ? 'linear-gradient(90deg,#2a6a2a,#7ddf64)' : 'linear-gradient(90deg,#6a2a2a,#e85a5a)';
+
+    return `<div class="qoq-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="qoq-theme">${d.theme}</div>
+        <div class="delta ${deltaClass}">${arrow} ${sign}${delta}pp</div>
+      </div>
+      <div class="qoq-row">
+        <div class="qoq-bars">
+          <div class="qoq-label">Q1 '26</div>
+          <div class="qoq-bar-track"><div class="qoq-bar-fill" style="width:${d.now}%;background:${nowGrad}"></div></div>
+          <div class="qoq-pct" style="color:${nowColor}">${d.now}%</div>
+        </div>
+      </div>
+      <div class="qoq-row">
+        <div class="qoq-bars">
+          <div class="qoq-label">Q1 '25</div>
+          <div class="qoq-bar-track"><div class="qoq-bar-fill" style="width:${d.prev}%;background:${prevColor}"></div></div>
+          <div class="qoq-pct" style="color:#6a7a5a">${d.prev}%</div>
+        </div>
+      </div>
+      <div class="qoq-insight">${d.insight}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterQoQ(type, pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderQoQ(type);
+}
+
+// ============================================================
+// MERCHANT VOICES RENDERING
+// ============================================================
+function renderVoices(filter) {
+  const el = document.getElementById('voices-grid');
+  const filtered = filter === 'all' ? voxPopsData : voxPopsData.filter(v => v.category === filter);
+
+  if (filtered.length === 0) {
+    el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 20px;"><div style="font-size:32px;margin-bottom:12px;">🎙️</div><div style="font-size:15px;color:#8a9a7a;font-weight:500;margin-bottom:8px;">Merchant Voices — Coming Soon</div><div style="font-size:12px;color:#5a6a4a;max-width:400px;margin:0 auto;line-height:1.6;">Real prospect quotes from call transcripts will be populated here. These will be sourced from sales call listening sessions and curated for the most compelling insights.</div></div>';
+    return;
+  }
+
+  const avatarEmojis = { won: '\u2713', lost: '\u2717', event: '\u2606' };
+  el.innerHTML = filtered.map(v => {
+    const avatarBg = v.category === 'won' ? '#1a3a1a' : v.category === 'lost' ? '#3a1a1a' : '#1a2a3a';
+    const avatarColor = v.category === 'won' ? '#7ddf64' : v.category === 'lost' ? '#e85a5a' : '#5ab8e8';
+    return `<div class="vox-pop">
+      <div class="vox-quote">${v.quote}</div>
+      <div class="vox-attribution">
+        <div class="vox-avatar" style="background:${avatarBg};color:${avatarColor}">${avatarEmojis[v.category]}</div>
+        <div class="vox-meta">
+          <div class="vox-who">${v.who}</div>
+          <div class="vox-context">${v.context}</div>
+        </div>
+        <span class="vox-tag">${v.theme}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterVoices(filter, pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderVoices(filter);
+}
+
+// ============================================================
+// FEATURED QUOTE (rotates on reload)
+// ============================================================
+function renderFeaturedQuote() {
+  const el = document.getElementById('featured-quote');
+  const featured = voxPopsData.filter(v => v.category === 'won' || v.category === 'event');
+  if (featured.length === 0) {
+    el.innerHTML = `
+      <div class="featured-quote-icon">\u{1F399}</div>
+      <div>
+        <div class="featured-quote-text">Merchant voices coming soon — real quotes from call transcripts will rotate here.</div>
+        <div class="featured-quote-attr">Visit the Merchant Voices tab to learn more</div>
+      </div>
+      <div class="featured-quote-label">Coming Soon</div>
+    `;
+    return;
+  }
+  const pick = featured[Math.floor(Math.random() * featured.length)];
+  el.innerHTML = `
+    <div class="featured-quote-icon">\u{1F399}</div>
+    <div>
+      <div class="featured-quote-text">"${pick.quote}"</div>
+      <div class="featured-quote-attr">— ${pick.who} · ${pick.context}</div>
+    </div>
+    <div class="featured-quote-label">${pick.theme}</div>
+  `;
+}
+
+// ============================================================
+// INITIAL RENDER
+// ============================================================
+renderThemes('won-themes', wonData.all, 'green', null);
+renderThemes('lost-themes', lostData.all, 'red', null);
+renderComparison();
+renderQoQ('won');
+renderVoices('all');
+renderFeaturedQuote();
+renderSignals();
+renderCompetitive();
+renderResearch('all');
+</script>
+</body>
+</html>
