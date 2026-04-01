@@ -14,12 +14,22 @@
 --   For summaries/pivots after: analyze_query_results
 --
 -- NOTES ON APAC FILTERS:
---   - sur.region filter value ('APAC') — verify against your sales_user_roles data
---   - sa.region CASE values — adjust to match actual values in sales_accounts
---     e.g. run: SELECT DISTINCT region FROM `shopify-dw.sales.sales_accounts`
---     WHERE region like '%Asia%' or similar to discover exact strings
+--   - sur.region = 'APAC' filters to APAC sales user roles
+--   - sa.account_subregion provides sub-region bucketing:
+--       ANZ, Japan, Greater China, SEA, India, Rest of APAC
 --   - "Plus Acquisition" = primary_product_interest = 'Plus' AND motion = 'Acquisition'
---     Verify the motion field value in sales_user_roles if needed
+--
+-- SCHEMA NOTES (verified March 2026):
+--   - sales_calls: event_id, event_start, call_duration_minutes, has_transcript,
+--     transcript_details (ARRAY<STRUCT<..., full_transcript ARRAY<STRUCT<
+--       transcript_block_start, sequence_number, speaker_name, speaker_email, speaker_text>>>>),
+--     attendee_details (ARRAY<STRUCT<attendee_email, response_status, is_organizer, is_shopify_employee>>),
+--     most_recent_salesforce_opportunity_id, call_sentiment, call_disposition
+--   - sales_opportunities: opportunity_id, salesforce_account_id (→ sa.account_id),
+--     salesforce_owner_id (→ u.user_id), current_stage_name, primary_product_interest
+--   - sales_accounts: account_id, account_region, account_subregion, region
+--   - sales_users_daily_snapshot: date (partition), user_id, user_role
+--   - sales_user_roles: user_role, segment, region, subregion, motion
 -- ============================================================
 
 DECLARE analysis_start DATE DEFAULT DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY);
@@ -38,23 +48,25 @@ WITH prospect_sentences AS (
         sur.region     AS rep_region,
         sur.motion     AS rep_motion,
 
-        -- Sub-region bucketing
-        -- *** VERIFY these string values match your sales_accounts.region field ***
+        -- Sub-region bucketing using account_subregion
+        -- sa.account_subregion values: ANZ, Japan, Greater China, SEA, India, Rest of APAC
         CASE
-            WHEN sa.region IN ('ANZ', 'Australia', 'New Zealand', 'AU', 'NZ')
-                THEN 'ANZ'
-            WHEN sa.region IN ('Japan', 'JP')
-                THEN 'Japan'
-            WHEN sa.region IN ('Greater China', 'GCR', 'Greater China Region',
-                               'China', 'Hong Kong', 'Taiwan', 'CN', 'HK', 'TW')
-                THEN 'Greater China Region'
-            WHEN sa.region IN ('Southeast Asia', 'SEA', 'Singapore', 'India',
-                               'Korea', 'South Korea', 'Indonesia', 'Thailand',
-                               'Malaysia', 'Philippines', 'Vietnam', 'Asia Pacific',
-                               'APAC', 'Rest of Asia')
+            WHEN sa.account_subregion = 'ANZ' THEN 'ANZ'
+            WHEN sa.account_subregion = 'Japan' THEN 'Japan'
+            WHEN sa.account_subregion = 'Greater China' THEN 'Greater China Region'
+            WHEN sa.account_subregion IN ('SEA', 'India', 'Rest of APAC')
                 THEN 'Rest of Asia'
             ELSE 'Other / Unclassified'
         END AS apac_subregion,
+
+        -- Segment bucketing
+        -- sur.segment values: Large, Enterprise, Unicorn, Large Mid-Mkt, Mid-Mkt, Mid-Mkt SMB, SMB, Not Applicable
+        CASE
+            WHEN sur.segment IN ('Large', 'Enterprise', 'Unicorn') THEN 'large_accounts'
+            WHEN sur.segment IN ('Large Mid-Mkt', 'Mid-Mkt') THEN 'mid_market'
+            WHEN sur.segment IN ('Mid-Mkt SMB', 'SMB') THEN 'smb'
+            ELSE 'other'
+        END AS segment_bucket,
 
         so.current_stage_name,
         so.primary_product_interest,
@@ -62,7 +74,7 @@ WITH prospect_sentences AS (
         -- Plus Acquisition flag (breakout column)
         CASE
             WHEN so.primary_product_interest = 'Plus'
-             AND sur.motion = 'Acquisition'  -- *** verify motion value ***
+             AND sur.motion = 'Acquisition'
             THEN TRUE ELSE FALSE
         END AS is_plus_acquisition,
 
@@ -72,10 +84,10 @@ WITH prospect_sentences AS (
     JOIN `shopify-dw.sales.sales_opportunities` so
         ON sc.most_recent_salesforce_opportunity_id = so.opportunity_id
     JOIN `shopify-dw.sales.sales_accounts` sa
-        ON so.account_id = sa.account_id  -- *** verify join key field name ***
+        ON so.salesforce_account_id = sa.account_id
     JOIN `shopify-dw.sales.sales_users_daily_snapshot` u
         ON so.salesforce_owner_id = u.user_id
-        AND u.date = DATE(sc.event_start)   -- required partition filter
+        AND u.date = DATE(sc.event_start)
     JOIN `shopify-dw.sales.sales_user_roles` sur
         ON u.user_role = sur.user_role,
     UNNEST(sc.transcript_details) AS transcript,
@@ -85,14 +97,14 @@ WITH prospect_sentences AS (
         AND ARRAY_LENGTH(sc.transcript_details) > 0
         AND DATE(sc.event_start) >= analysis_start
         AND DATE(sc.event_start) < analysis_end
-        AND u.date BETWEEN analysis_start AND analysis_end  -- partition filter, must match
+        AND u.date BETWEEN analysis_start AND analysis_end
         AND sc.call_duration_minutes >= 5
         AND LENGTH(sentence.speaker_text) >= 30
-        AND sur.region = 'APAC'  -- *** verify region value in sales_user_roles ***
+        AND sur.region = 'APAC'
 
         -- Prospect voice only (exclude Shopify employees)
         AND sentence.speaker_email NOT IN (
-            SELECT attendee.email
+            SELECT attendee.attendee_email
             FROM UNNEST(sc.attendee_details) AS attendee
             WHERE attendee.is_shopify_employee = TRUE
         )
@@ -109,6 +121,7 @@ call_themes AS (
         call_disposition,
         rep_segment,
         apac_subregion,
+        segment_bucket,
         current_stage_name,
         primary_product_interest,
         is_plus_acquisition,
@@ -208,7 +221,7 @@ call_themes AS (
             THEN 1 ELSE 0 END) AS theme_marketplace_crossborder
 
     FROM prospect_sentences
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 -- ============================================================
@@ -228,19 +241,19 @@ call_themes_staged AS (
 )
 
 -- ============================================================
--- FINAL OUTPUT: Theme prevalence by APAC sub-region
+-- FINAL OUTPUT: Theme prevalence by APAC sub-region, outcome, and segment
 -- Shows: % of calls where prospect mentioned each theme (1+ = any mention)
--- Also shows 3+ threshold for themes most likely to be substantive objections
 -- ============================================================
 SELECT
     apac_subregion,
     stage_group,
+    segment_bucket,
 
     COUNT(DISTINCT event_id)    AS total_calls,
     DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY) AS window_start,
     CURRENT_DATE()              AS window_end,
 
-    -- ── OBJECTIONS (any mention + 3+ for depth) ──────────────────
+    -- ── OBJECTIONS ────────────────────────────────────────────
     ROUND(SAFE_DIVIDE(COUNTIF(theme_cost_tco >= 1),            COUNT(DISTINCT event_id)), 3) AS pct_cost_tco,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_cost_tco >= 3),            COUNT(DISTINCT event_id)), 3) AS pct_cost_tco_3plus,
 
@@ -251,7 +264,7 @@ SELECT
     ROUND(SAFE_DIVIDE(COUNTIF(theme_internal_stakeholders >= 1), COUNT(DISTINCT event_id)), 3) AS pct_stakeholders,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_security_compliance >= 1), COUNT(DISTINCT event_id)), 3) AS pct_security,
 
-    -- ── EVALUATION QUESTIONS ──────────────────────────────────────
+    -- ── EVALUATION QUESTIONS ──────────────────────────────────
     ROUND(SAFE_DIVIDE(COUNTIF(theme_timeline >= 1),            COUNT(DISTINCT event_id)), 3) AS pct_timeline,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_integration_tech >= 1),    COUNT(DISTINCT event_id)), 3) AS pct_integration,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_integration_tech >= 3),    COUNT(DISTINCT event_id)), 3) AS pct_integration_3plus,
@@ -260,12 +273,12 @@ SELECT
     ROUND(SAFE_DIVIDE(COUNTIF(theme_scalability >= 1),         COUNT(DISTINCT event_id)), 3) AS pct_scalability,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_analytics_reporting >= 1), COUNT(DISTINCT event_id)), 3) AS pct_analytics,
 
-    -- ── COMPETITIVE & MIGRATION ───────────────────────────────────
+    -- ── COMPETITIVE & MIGRATION ───────────────────────────────
     ROUND(SAFE_DIVIDE(COUNTIF(theme_competitive >= 1),         COUNT(DISTINCT event_id)), 3) AS pct_competitive,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_competitive >= 3),         COUNT(DISTINCT event_id)), 3) AS pct_competitive_3plus,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_migration >= 1),           COUNT(DISTINCT event_id)), 3) AS pct_migration,
 
-    -- ── PRODUCT ───────────────────────────────────────────────────
+    -- ── PRODUCT ───────────────────────────────────────────────
     ROUND(SAFE_DIVIDE(COUNTIF(theme_checkout_payments >= 1),   COUNT(DISTINCT event_id)), 3) AS pct_checkout,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_pos_omnichannel >= 1),     COUNT(DISTINCT event_id)), 3) AS pct_pos_omnichannel,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_b2b >= 1),                 COUNT(DISTINCT event_id)), 3) AS pct_b2b,
@@ -274,15 +287,15 @@ SELECT
     ROUND(SAFE_DIVIDE(COUNTIF(theme_ai >= 3),                  COUNT(DISTINCT event_id)), 3) AS pct_ai_3plus,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_growth >= 1),              COUNT(DISTINCT event_id)), 3) AS pct_growth,
 
-    -- ── APAC-SPECIFIC ─────────────────────────────────────────────
+    -- ── APAC-SPECIFIC ─────────────────────────────────────────
     ROUND(SAFE_DIVIDE(COUNTIF(theme_local_payments >= 1),      COUNT(DISTINCT event_id)), 3) AS pct_local_payments,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_localisation >= 1),        COUNT(DISTINCT event_id)), 3) AS pct_localisation,
     ROUND(SAFE_DIVIDE(COUNTIF(theme_marketplace_crossborder >= 1), COUNT(DISTINCT event_id)), 3) AS pct_marketplace_xborder
 
 FROM call_themes_staged
 WHERE apac_subregion != 'Other / Unclassified'
-  AND stage_group IN ('Early-Stage', 'Late-Stage')
-GROUP BY 1, 2
+  AND stage_group IN ('Closed Won', 'Closed Lost')
+GROUP BY 1, 2, 3
 ORDER BY
     CASE apac_subregion
         WHEN 'ANZ'                   THEN 1
@@ -290,27 +303,15 @@ ORDER BY
         WHEN 'Greater China Region'  THEN 3
         WHEN 'Rest of Asia'          THEN 4
     END,
-    CASE stage_group
-        WHEN 'Early-Stage' THEN 1
-        WHEN 'Late-Stage'  THEN 2
-        ELSE 3
-    END;
+    stage_group,
+    segment_bucket;
 
 
--- ============================================================
--- VARIANT A: Add Plus Acquisition as a separate row dimension
--- Uncomment and run instead of the query above if you want
--- Plus Acquisition as its own breakout alongside sub-regions
--- ============================================================
-/*
-... replace GROUP BY 1 with GROUP BY apac_subregion, is_plus_acquisition
-    and add is_plus_acquisition to SELECT
-*/
+
 
 
 -- ============================================================
--- VARIANT B: Stage breakdown within APAC
--- Run this to see how themes shift Early → Late → Won → Lost
+-- VARIANT A: Pipeline stage analysis (Early-Stage vs Late-Stage)
 -- ============================================================
 /*
 SELECT
@@ -324,7 +325,7 @@ SELECT
     ROUND(SAFE_DIVIDE(COUNTIF(theme_risk_concern >= 1),        COUNT(DISTINCT event_id)), 3) AS pct_risk
 FROM call_themes_staged
 WHERE apac_subregion != 'Other / Unclassified'
-  AND stage_group != 'Other'
+  AND stage_group IN ('Early-Stage', 'Late-Stage', 'Closed Won', 'Closed Lost')
 GROUP BY 1, 2
 ORDER BY 1, CASE stage_group
     WHEN 'Early-Stage'  THEN 1
@@ -334,18 +335,44 @@ ORDER BY 1, CASE stage_group
 */
 
 
+
+
+
 -- ============================================================
--- VARIANT C: Verbatim prospect quotes for a specific theme
--- Swap in any theme regex below — useful for qual deep-dives
+-- VARIANT B: Plus Acquisition breakout
 -- ============================================================
 /*
 SELECT
-    DATE(sc.event_start) AS call_date,
     apac_subregion,
-    so.current_stage_name,
-    sentence.speaker_name,
-    sentence.speaker_text
-FROM prospect_sentences  -- reuse the CTE above if running in one query
+    stage_group,
+    is_plus_acquisition,
+    COUNT(DISTINCT event_id) AS total_calls,
+    ROUND(SAFE_DIVIDE(COUNTIF(theme_cost_tco >= 1), COUNT(DISTINCT event_id)), 3) AS pct_cost_tco,
+    ROUND(SAFE_DIVIDE(COUNTIF(theme_integration_tech >= 1), COUNT(DISTINCT event_id)), 3) AS pct_integration,
+    ROUND(SAFE_DIVIDE(COUNTIF(theme_customization >= 1), COUNT(DISTINCT event_id)), 3) AS pct_customization
+FROM call_themes_staged
+WHERE apac_subregion != 'Other / Unclassified'
+  AND stage_group IN ('Closed Won', 'Closed Lost')
+GROUP BY 1, 2, 3
+ORDER BY 1, 2, 3;
+*/
+
+
+
+
+
+-- ============================================================
+-- VARIANT C: Verbatim prospect quotes for a specific theme
+-- ============================================================
+/*
+SELECT
+    call_date,
+    apac_subregion,
+    current_stage_name,
+    speaker_text
+FROM prospect_sentences
+WHERE REGEXP_CONTAINS(LOWER(speaker_text),
+    r'(?:\bai\b|artificial intelligence|machine learning|automat|sidekick|copilot|agentic)')
 ORDER BY call_date DESC
 LIMIT 200;
 */
